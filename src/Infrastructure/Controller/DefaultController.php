@@ -2,9 +2,6 @@
 
 namespace App\Controller;
 
-
-use App\Form\Type\CreateEventType;
-use App\Form\Type\UpdateEventType;
 use Calendar\Calendar;
 use Calendar\Command\CreateEvent;
 use Calendar\Command\UpdateEvent;

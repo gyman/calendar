@@ -16,4 +16,10 @@ return [
     Symfony\Bundle\WebServerBundle\WebServerBundle::class => ['dev' => true],
     League\Tactician\Bundle\TacticianBundle::class => ['all' => true],
     FOS\JsRoutingBundle\FOSJsRoutingBundle::class => ['all' => true],
+    Prooph\Bundle\EventStore\ProophEventStoreBundle::class => ['all' => true],
+    Prooph\Bundle\ServiceBus\ProophServiceBusBundle::class => ['all' => true],
+    Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle::class => ['dev' => true, 'test' => true],
+    EasyCorp\Bundle\EasyAdminBundle\EasyAdminBundle::class => ['all' => true],
+    Liip\FunctionalTestBundle\LiipFunctionalTestBundle::class => ['all' => true],
+    Liip\MonitorBundle\LiipMonitorBundle::class => ['all' => true],
 ];

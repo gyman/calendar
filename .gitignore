@@ -27,3 +27,6 @@ behat.yml
 ###< behat/symfony2-extension ###
 
 /.idea
+###> phpunit/phpunit ###
+/phpunit.xml
+###< phpunit/phpunit ###

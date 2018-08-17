@@ -1,0 +1,79 @@
+prooph_event_store:
+  stores:
+    balance_store:
+      event_store:                  Prooph\EventStore\Pdo\MySqlEventStore
+
+      repositories:
+        App\Repository\CalendarRepository:
+          aggregate_type:           Calendar\Calendar
+          aggregate_translator:     Prooph\EventSourcing\EventStoreIntegration\AggregateTranslator
+          one_stream_per_aggregate: false
+          stream_name:              !php/const App\Table::EVENT_STREAM_CALENDAR
+          snapshot_store:           Prooph\SnapshotStore\Pdo\PdoSnapshotStore
+
+  projection_managers:
+
+    default_projection_manager:
+      event_store:          Prooph\EventStore\Pdo\MySqlEventStore
+      connection:           Doctrine\DBAL\Driver\PDOConnection
+
+      event_streams_table:  event_streams
+      projections_table:    projections
+
+      projections:
+        balance:
+          read_model:       BalanceView\BalanceReadModel
+          projection:       BalanceView\BalanceProjection
+        balance_snapshots:
+          read_model:       Prooph\Snapshotter\SnapshotReadModel
+          projection:       BalanceView\BalanceSnapshotProjection
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  BalanceView\BalanceReadModel: ~
+  BalanceView\BalanceProjection:
+    public: true
+  BalanceView\BalanceSnapshotProjection:
+    public: true
+
+  Prooph\SnapshotStore\Pdo\PdoSnapshotStore: ~
+  Prooph\EventSourcing\EventStoreIntegration\AggregateTranslator: ~
+  Prooph\Common\Messaging\FQCNMessageFactory: ~
+  Prooph\EventStore\Pdo\PersistenceStrategy\MySqlSingleStreamStrategy: ~
+  Prooph\EventStore\Pdo\MySqlEventStore: ~
+  Prooph\Bundle\EventStore\ProjectionManagerFactory: ~
+  Doctrine\DBAL\Driver\PDOConnection:
+    factory: ["@doctrine.dbal.default_connection", getWrappedConnection]
+
+  # aliasing
+
+  Prooph\EventStore\Pdo\PersistenceStrategy:          '@Prooph\EventStore\Pdo\PersistenceStrategy\MySqlSingleStreamStrategy'
+  Prooph\ServiceBus\EventBus:                         '@prooph_service_bus.account'
+  Prooph\EventSourcing\Aggregate\AggregateTranslator: '@Prooph\EventSourcing\EventStoreIntegration\AggregateTranslator'
+  Prooph\EventStore\TransactionalEventStore:          '@Prooph\EventStore\Pdo\MySqlEventStore'
+  Prooph\EventStore\Projection\ProjectionManager:     '@prooph_event_store.projection_manager.default_projection_manager'
+  PDO:                                                '@Doctrine\DBAL\Driver\PDOConnection'
+  Prooph\EventStore\EventStore:                       '@prooph_event_store.balance_store'
+  Prooph\EventSourcing\Aggregate\AggregateRepository: '@App\Repository\AccountRepository'
+  Prooph\SnapshotStore\SnapshotStore:                 '@Prooph\SnapshotStore\Pdo\PdoSnapshotStore'
+
+  #snapshots:
+
+  Prooph\Snapshotter\SnapshotReadModel:
+    arguments:
+      $aggregateTypes: [Balance\Account]
+
+  Prooph\EventStore\Pdo\Projection\PdoEventStoreReadModelProjector:
+    factory: ["@prooph_event_store.projection_manager.default_projection_manager", "createReadModelProjection"]
+    arguments:
+      - 'balance_snapshots'
+      - '@Prooph\Snapshotter\SnapshotReadModel'
+
+  Prooph\Snapshotter\StreamSnapshotProjection:
+    arguments:
+      - '@Prooph\EventStore\Pdo\Projection\PdoEventStoreReadModelProjector'
+      - !php/const App\Table::EVENT_STREAM_CALENDAR

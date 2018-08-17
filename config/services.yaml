@@ -1,32 +1,18 @@
-# This file is the entry point to configure your own services.
-# Files in the packages/ subdirectory configure your dependencies.
-
-# Put parameters here that don't need to change on each machine where the app is deployed
-# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: 'en'
 
 services:
-    # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         public: false       # Allows optimizing the container by removing unused services; this also means
-
-    # makes classes in src/ available to be used as services
-    # this creates a service per class whose id is the fully-qualified class name
     App\:
-        resource: '../src/Infrastructure/Symfony/*'
-        exclude: '../src/Infrastructure/Symfony/{Entity,Migrations,Tests,Kernel.php}'
+        resource: '../src/Infrastructure/*'
+        exclude: '../src/Infrastructure/{Entity,Migrations,Tests,Kernel.php}'
 
-    # controllers are imported separately to make sure services can be injected
-    # as action arguments even if you don't extend any base controller class
     App\Controller\:
-        resource: '../src/Infrastructure/Symfony/Controller'
+        resource: '../src/Infrastructure/Controller'
         tags: ['controller.service_arguments']
-
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
 
     App\Repository\CalendarRepository:
       factory: ["@doctrine.orm.entity_manager", "getRepository"]

@@ -2,18 +2,36 @@
     "type": "project",
     "license": "proprietary",
     "require": {
-        "php": "^7.1.3",
+        "php": "^7.2",
+        "ext-PDO": "*",
+        "ext-ctype": "*",
         "ext-iconv": "*",
         "ext-json": "*",
+        "doctrine/data-fixtures": "^1.3",
+        "doctrine/doctrine-bundle": "^1.9",
+        "doctrine/doctrine-fixtures-bundle": "^3.0",
+        "doctrine/orm": "^2.6",
+        "easycorp/easyadmin-bundle": "^1.17",
         "friendsofsymfony/jsrouting-bundle": "^2.2",
         "jakubledl/dissect": "^1.0",
+        "fzaninotto/faker": "^1.8",
         "league/tactician-bundle": "^1.1",
+        "liip/functional-test-bundle": "~2.0@dev",
+        "liip/monitor-bundle": "^2.7",
         "nesbot/carbon": "^1.32",
+        "prooph/event-sourcing": "^5.6",
+        "prooph/event-store-bus-bridge": "^3.2",
+        "prooph/event-store-symfony-bundle": "^0.5.0",
+        "prooph/pdo-event-store": "^1.9",
+        "prooph/pdo-snapshot-store": "^1.5",
+        "prooph/service-bus-symfony-bundle": "^0.7.0",
+        "prooph/snapshotter": "^2.1",
         "ramsey/uuid": "^3.7",
         "ramsey/uuid-doctrine": "^1.4",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/asset": "^4.1",
         "symfony/console": "^4.1",
+        "symfony/dotenv": "^4.1",
         "symfony/expression-language": "^4.1",
         "symfony/flex": "^1.0",
         "symfony/form": "^4.1",
@@ -33,18 +51,20 @@
         "webmozart/assert": "^1.3@dev"
     },
     "require-dev": {
-        "symfony/debug-pack": "*",
-        "symfony/dotenv": "^4.1",
-        "symfony/maker-bundle": "^1.0",
-        "symfony/profiler-pack": "*",
-        "symfony/test-pack": "^1.0",
-        "symfony/web-server-bundle": "^4.1",
-        "behat/behat": "^3",
+        "behat/behat": "^3.4",
         "behat/mink": "^1.7",
         "behat/mink-browserkit-driver": "^1.3",
         "behat/mink-extension": "^2.3",
         "behat/symfony2-extension": "^2.1",
         "behatch/contexts": "^3.1",
+        "phpunit/phpunit": "^7.2",
+        "symfony/debug-pack": "*",
+        "symfony/dotenv": "^4.1",
+        "symfony/maker-bundle": "^1.0",
+        "symfony/phpunit-bridge": "*",
+        "symfony/profiler-pack": "*",
+        "symfony/test-pack": "^1.0",
+        "symfony/web-server-bundle": "^4.1",
         "phpmd/phpmd": "^2.6",
         "phpstan/phpstan": "^0.10.0@dev",
         "sebastian/phpcpd": "~2"
@@ -58,12 +78,12 @@
     },
     "autoload": {
         "psr-4": {
-            "App\\": "src/Infrastructure/Symfony",
+            "App\\": "src/Infrastructure",
             "Calendar\\": "src/Calendar",
             "Test\\": "tests"
         },
         "classmap": [
-            "src/Infrastructure/Symfony/Kernel.php"
+            "src/Infrastructure/Kernel.php"
         ],
         "files": [
             "src/functions.php"
@@ -71,10 +91,11 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "App\\Tests\\": "tests/"
+            "Tests\\": "tests/"
         }
     },
     "replace": {
+        "symfony/polyfill-ctype": "*",
         "symfony/polyfill-iconv": "*",
         "symfony/polyfill-php71": "*",
         "symfony/polyfill-php70": "*",
@@ -90,6 +111,12 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
+        ],
+        "install-db": [
+          "./bin/console doctrine:database:create --no-interaction --no-ansi --if-not-exists",
+          "./bin/console doctrine:query:sql \"`cat vendor/prooph/pdo-event-store/scripts/mysql/01_event_streams_table.sql`\"",
+          "./bin/console doctrine:query:sql \"`cat vendor/prooph/pdo-event-store/scripts/mysql/02_projections_table.sql`\"",
+          "./bin/console doctrine:query:sql \"`cat vendor/prooph/pdo-event-store/scripts/mysql/mysql_snapshot_table.sql`\""
         ]
     },
     "conflict": {

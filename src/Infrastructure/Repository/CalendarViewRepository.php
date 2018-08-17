@@ -7,7 +7,7 @@ use Calendar\Repository\CalendarRepositoryInterface;
 use Doctrine\ORM\EntityRepository;
 use Ramsey\Uuid\UuidInterface;
 
-class CalendarRepository extends EntityRepository implements CalendarRepositoryInterface
+class CalendarViewRepository extends EntityRepository implements CalendarRepositoryInterface
 {
     public function save(Calendar $calendar): void
     {
