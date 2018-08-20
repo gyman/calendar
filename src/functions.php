@@ -1,6 +1,10 @@
 <?php
 namespace Calendar;
 
+use Carbon\Carbon;
+use DateTime;
+use DateTimeImmutable;
+
 function cartesian_product(array $set) : array
 {
     if (!$set) {
@@ -16,4 +20,21 @@ function cartesian_product(array $set) : array
         }
     }
     return $result;
+}
+
+function get_class_last_part($object): string
+{
+    if (!is_object($object)) {
+        throw new \InvalidArgumentException('Argument #0 must be an object');
+    }
+
+    return array_slice(explode('\\', get_class($object)), -1)[0];
+}
+
+function carbonite(DateTimeImmutable $dateTimeImmutable): Carbon
+{
+    $dateTime = new DateTime(null, $dateTimeImmutable->getTimezone());
+    $dateTime->setTimestamp($dateTimeImmutable->getTimestamp());
+
+    return Carbon::instance($dateTime);
 }

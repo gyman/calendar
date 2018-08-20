@@ -7,9 +7,11 @@ use DatePeriod;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Prooph\EventSourcing\AggregateChanged;
+use Prooph\EventSourcing\AggregateRoot;
 use Ramsey\Uuid\UuidInterface;
 
-class Calendar
+class Calendar extends AggregateRoot
 {
     /** @var UuidInterface */
     protected $id;
@@ -26,13 +28,29 @@ class Calendar
     /** @var DateTime */
     protected $createdAt;
 
-    public function __construct(UuidInterface $id, string $name, ?Collection $events = null)
+    protected function __construct(UuidInterface $id, string $name, ?Collection $events = null)
     {
+        parent::__construct();
+
         $this->id = $id;
         $this->name = $name;
         $this->events = $events ?? new ArrayCollection();
         $this->createdAt = $this->updatedAt = new DateTime();
     }
+
+    protected function aggregateId(): string
+    {
+        return $this->id()->toString();
+    }
+
+    protected function apply(AggregateChanged $event): void
+    {
+        $method = 'when' . get_class_last_part($event);
+        $this->{$method}($event);
+
+        $this->updatedAt = Carbon::now();
+    }
+
 
     public function id(): UuidInterface
     {
