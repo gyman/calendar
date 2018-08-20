@@ -1,6 +1,6 @@
 prooph_event_store:
   stores:
-    balance_store:
+    calendar_store:
       event_store:                  Prooph\EventStore\Pdo\MySqlEventStore
 
       repositories:
@@ -21,12 +21,12 @@ prooph_event_store:
       projections_table:    projections
 
       projections:
-        balance:
-          read_model:       BalanceView\BalanceReadModel
-          projection:       BalanceView\BalanceProjection
-        balance_snapshots:
+        calendar:
+          read_model:       CalendarView\CalendarReadModel
+          projection:       CalendarView\CalendarProjection
+        calendar_snapshots:
           read_model:       Prooph\Snapshotter\SnapshotReadModel
-          projection:       BalanceView\BalanceSnapshotProjection
+          projection:       CalendarView\CalendarSnapshotProjection
 
 services:
   _defaults:
@@ -34,10 +34,10 @@ services:
     autoconfigure: true
     public: false
 
-  BalanceView\BalanceReadModel: ~
-  BalanceView\BalanceProjection:
+  CalendarView\CalendarReadModel: ~
+  CalendarView\CalendarProjection:
     public: true
-  BalanceView\BalanceSnapshotProjection:
+  CalendarView\CalendarSnapshotProjection:
     public: true
 
   Prooph\SnapshotStore\Pdo\PdoSnapshotStore: ~
@@ -57,20 +57,20 @@ services:
   Prooph\EventStore\TransactionalEventStore:          '@Prooph\EventStore\Pdo\MySqlEventStore'
   Prooph\EventStore\Projection\ProjectionManager:     '@prooph_event_store.projection_manager.default_projection_manager'
   PDO:                                                '@Doctrine\DBAL\Driver\PDOConnection'
-  Prooph\EventStore\EventStore:                       '@prooph_event_store.balance_store'
-  Prooph\EventSourcing\Aggregate\AggregateRepository: '@App\Repository\AccountRepository'
+  Prooph\EventStore\EventStore:                       '@prooph_event_store.calendar_store'
+  Prooph\EventSourcing\Aggregate\AggregateRepository: '@App\Repository\CalendarRepository'
   Prooph\SnapshotStore\SnapshotStore:                 '@Prooph\SnapshotStore\Pdo\PdoSnapshotStore'
 
   #snapshots:
 
   Prooph\Snapshotter\SnapshotReadModel:
     arguments:
-      $aggregateTypes: [Balance\Account]
+      $aggregateTypes: [Calendar\Account]
 
   Prooph\EventStore\Pdo\Projection\PdoEventStoreReadModelProjector:
     factory: ["@prooph_event_store.projection_manager.default_projection_manager", "createReadModelProjection"]
     arguments:
-      - 'balance_snapshots'
+      - 'calendar_snapshots'
       - '@Prooph\Snapshotter\SnapshotReadModel'
 
   Prooph\Snapshotter\StreamSnapshotProjection:

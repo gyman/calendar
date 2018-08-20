@@ -1,7 +1,7 @@
 prooph_service_bus:
 
   event_buses:
-    balance_event_bus:
+    calendar_event_bus:
       plugins:
         - 'prooph_service_bus.on_event_invoke_strategy'
 
@@ -16,7 +16,7 @@ services:
     public: false
 
   Prooph\EventStoreBusBridge\EventPublisher:
-    arguments: ['@prooph_service_bus.balance_event_bus']
+    arguments: ['@prooph_service_bus.calendar_event_bus']
     public: true
     tags:
-    - { name: 'prooph_event_store.balance_store.plugin' }
+    - { name: 'prooph_event_store.calendar_store.plugin' }
