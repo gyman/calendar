@@ -6,14 +6,14 @@ use Behat\Gherkin\Node\TableNode;
 use Calendar\Calendar;
 use Calendar\Event;
 use Calendar\Expression\Parser;
-use Calendar\Repository\CalendarRepositoryInterface;
+use Calendar\Repository\CalendarViewRepositoryInterface;
 use Ramsey\Uuid\Uuid;
 use Test\Infrastructure\InMemoryCalendarRepository;
 use Webmozart\Assert\Assert;
 
 class IntegrationContext implements Context
 {
-    /** @var CalendarRepositoryInterface  */
+    /** @var CalendarViewRepositoryInterface  */
     protected $calendarRepository;
 
     public function __construct(Kernel $kernel)

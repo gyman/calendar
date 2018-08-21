@@ -1,13 +1,5 @@
 default:
     suites:
-        integration:
-            contexts:
-                - IntegrationContext:
-                    kernel: '@kernel'
-        functional:
-            contexts:
-                - FunctionalContext:
-                    kernel: '@kernel'
         web:
             contexts:
                 - WebContext:

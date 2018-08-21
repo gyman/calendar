@@ -2,6 +2,7 @@
 
 namespace Calendar;
 
+use Carbon\Carbon;
 use DateInterval;
 use DatePeriod;
 use DateTime;

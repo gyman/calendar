@@ -3,11 +3,11 @@
 namespace App\Repository;
 
 use Calendar\Calendar;
-use Calendar\Repository\CalendarRepositoryInterface;
+use Calendar\Repository\CalendarViewRepositoryInterface;
 use Doctrine\ORM\EntityRepository;
 use Ramsey\Uuid\UuidInterface;
 
-class CalendarViewRepository extends EntityRepository implements CalendarRepositoryInterface
+class CalendarViewRepository extends EntityRepository implements CalendarViewRepositoryInterface
 {
     public function save(Calendar $calendar): void
     {

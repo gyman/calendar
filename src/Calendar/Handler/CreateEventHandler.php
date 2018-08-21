@@ -6,20 +6,20 @@ use Calendar\Calendar;
 use Calendar\Command\CreateEvent;
 use Calendar\Event;
 use Calendar\Expression\Builder;
-use Calendar\Repository\CalendarRepositoryInterface;
+use Calendar\Repository\CalendarViewRepositoryInterface;
 use Calendar\Repository\EventRepositoryInterface;
 use Ramsey\Uuid\Uuid;
 use Webmozart\Assert\Assert;
 
 class CreateEventHandler
 {
-    /** @var CalendarRepositoryInterface */
+    /** @var CalendarViewRepositoryInterface */
     protected $calendarRepository;
 
     /** @var EventRepositoryInterface */
     protected $eventRepository;
 
-    public function __construct(CalendarRepositoryInterface $calendarRepository, EventRepositoryInterface $eventRepository)
+    public function __construct(CalendarViewRepositoryInterface $calendarRepository, EventRepositoryInterface $eventRepository)
     {
         $this->calendarRepository = $calendarRepository;
         $this->eventRepository = $eventRepository;

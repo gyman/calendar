@@ -3,13 +3,13 @@
 namespace Test\Infrastructure;
 
 use Calendar\Calendar;
-use Calendar\Repository\CalendarRepositoryInterface;
+use Calendar\Repository\CalendarViewRepositoryInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
-class InMemoryCalendarRepository implements CalendarRepositoryInterface
+class InMemoryCalendarRepository implements CalendarViewRepositoryInterface
 {
     /** @var Collection|null|Calendar[] */
     protected $calendars;

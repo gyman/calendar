@@ -6,7 +6,7 @@ use Calendar\Calendar;
 use Calendar\Command\CreateEvent;
 use Calendar\Command\UpdateEvent;
 use Calendar\Event\TimeSpan;
-use Calendar\Repository\CalendarRepositoryInterface;
+use Calendar\Repository\CalendarViewRepositoryInterface;
 use Calendar\Repository\EventRepositoryInterface;
 use Carbon\Carbon;
 use DateTime;
@@ -20,7 +20,7 @@ use Webmozart\Assert\Assert;
 
 class DefaultController extends AbstractController
 {
-    public function indexAction(Request $request, CalendarRepositoryInterface $calendarRepository) : Response
+    public function indexAction(Request $request, CalendarViewRepositoryInterface $calendarRepository) : Response
     {
         $calendars = $calendarRepository->findAll();
         $startDate = new DateTime("last monday");
@@ -43,7 +43,7 @@ class DefaultController extends AbstractController
         ]);
     }
 
-    public function addEventAction(Request $request, CommandBus $bus, CalendarRepositoryInterface $repository) : Response
+    public function addEventAction(Request $request, CommandBus $bus, CalendarViewRepositoryInterface $repository) : Response
     {
         $calendars = array_reduce($repository->findAll(), function(&$result, Calendar $calendar) : array {
             $result[$calendar->name()] = $calendar->id()->toString();
@@ -83,7 +83,7 @@ class DefaultController extends AbstractController
         ]);
     }
 
-    public function getEventsAction(Request $request, CalendarRepositoryInterface $repository) : JsonResponse
+    public function getEventsAction(Request $request, CalendarViewRepositoryInterface $repository) : JsonResponse
     {
         $start = Carbon::parse($request->get('start', 'this week'));
         $end = Carbon::parse($request->get('end', 'next week'));
@@ -103,7 +103,7 @@ class DefaultController extends AbstractController
         return new JsonResponse($events);
     }
 
-    public function updateEventAction(Request $request, CommandBus $bus, CalendarRepositoryInterface $calendarRepository, EventRepositoryInterface $eventRepository) : Response
+    public function updateEventAction(Request $request, CommandBus $bus, CalendarViewRepositoryInterface $calendarRepository, EventRepositoryInterface $eventRepository) : Response
     {
         $event = $eventRepository->findById(Uuid::fromString($request->get('eventId')));
         Assert::notNull($event);

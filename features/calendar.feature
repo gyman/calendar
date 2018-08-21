@@ -17,7 +17,9 @@ Feature: I can add end manipulate events
 
   Scenario: Create a calendar
     Given there is 0 calendars in calendar repository
-    When I add new 'test' calendar
+    When I add new calendar with data:
+    | id                                   | name |
+    | 00000000-0000-0000-0000-000000000001 | test |
     Then there is 1 calendars in calendar repository
     And calendar 'test' has 0 events
 
@@ -63,7 +65,7 @@ Feature: I can add end manipulate events
     When I update event 'cde' in calendar 'test' with expression 'after 2018-05-01 and before 2018-05-15'
     Then I get 2 events with 45 occurrences for range from 2018-04-01 to 2018-05-30 in calendar 'test'
 
-  Scenario: Change events description
+#  Scenario: Change events description
 #
 #  Scenario: Update events hours
 #
