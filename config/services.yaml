@@ -8,26 +8,27 @@ services:
         public: false       # Allows optimizing the container by removing unused services; this also means
     App\:
         resource: '../src/Infrastructure/*'
-        exclude: '../src/Infrastructure/{Entity,Migrations,Tests,Kernel.php}'
+        exclude: '../src/Infrastructure/{Repository,EventDispatcher,DependencyInjection,Entity,Migrations,Tests,Twig,Kernel.php}'
 
     App\Controller\:
         resource: '../src/Infrastructure/Controller'
         tags: ['controller.service_arguments']
 
-    App\Repository\CalendarRepository:
+    App\Repository\CalendarViewRepository:
       factory: ["@doctrine.orm.entity_manager", "getRepository"]
       public: true
       arguments:
         - 'Calendar\Calendar'
 
-    App\Repository\EventRepository:
+    App\Repository\EventViewRepository:
       factory: ["@doctrine.orm.entity_manager", "getRepository"]
       public: true
       arguments:
         - 'Calendar\Event'
 
     Calendar\Repository\CalendarRepositoryInterface: '@App\Repository\CalendarRepository'
-    Calendar\Repository\EventRepositoryInterface: '@App\Repository\EventRepository'
+    Calendar\Repository\CalendarViewRepositoryInterface: '@App\Repository\CalendarViewRepository'
+    Calendar\Repository\EventRepositoryInterface: '@App\Repository\EventViewRepository'
 
     Calendar\Handler\CreateEventHandler:
       tags:

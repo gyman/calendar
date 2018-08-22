@@ -7,7 +7,7 @@ use Calendar\Repository\EventRepositoryInterface;
 use Doctrine\ORM\EntityRepository;
 use Ramsey\Uuid\UuidInterface;
 
-class EventRepository extends EntityRepository implements EventRepositoryInterface
+class EventViewRepository extends EntityRepository implements EventRepositoryInterface
 {
     public function save(Event $event): void
     {

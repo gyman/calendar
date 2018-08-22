@@ -2,7 +2,7 @@
 
 use App\Kernel;
 use App\Repository\CalendarViewRepository;
-use App\Repository\EventRepository;
+use App\Repository\EventViewRepository;
 use Behat\Gherkin\Node\TableNode;
 use Calendar\Command\CreateEvent;
 use Calendar\Event\TimeSpan;
@@ -19,7 +19,7 @@ class FunctionalContext extends IntegrationContext
     {
         $this->kernel = $kernel;
         $this->calendarRepository = $kernel->getContainer()->get(CalendarViewRepository::class);
-        $this->eventRepository = $kernel->getContainer()->get(EventRepository::class);
+        $this->eventRepository = $kernel->getContainer()->get(EventViewRepository::class);
     }
 
     protected function get(string $serviceName) : ?object

@@ -6,11 +6,16 @@ use Behat\Behat\Context\Context;
 use Behat\Gherkin\Node\TableNode;
 use Calendar\Calendar;
 use Calendar\Event;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\SchemaTool;
 use Prooph\EventStore\InMemoryEventStore;
 use Prooph\EventStore\Stream;
 use Prooph\EventStore\StreamName;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Webmozart\Assert\Assert;
 
 abstract class AbstractContext implements Context
@@ -25,6 +30,8 @@ abstract class AbstractContext implements Context
 
         $inMemoryEventStore = $this->get(InMemoryEventStore::class);
         $inMemoryEventStore->create(new Stream(new StreamName(Table::EVENT_STREAM_CALENDAR), new \ArrayIterator([])));
+
+        $this->truncateTables();
     }
 
     protected function get(string $serviceName) : object
@@ -141,4 +148,60 @@ abstract class AbstractContext implements Context
     abstract protected function addEvent(UuidInterface $fromString, string $name, string $expression, string $hours);
 
     abstract protected function removeEvent(string $id, string $eventName);
+
+    protected function truncateTables()
+    {
+        /** @var EntityManagerInterface $em */
+        $em = $this->get('doctrine')->getManager();
+
+        $em->getConnection()->getSchemaManager()->dropAndCreateDatabase(
+            $em->getConnection()->getDatabase()
+        );
+
+        $em->getConnection()->close();
+        $em->getConnection()->connect();
+
+        $tool = new SchemaTool($em);
+        $tool->createSchema(
+            $em->getMetadataFactory()->getAllMetadata()
+        );
+
+        if($em->getConnection()->getDatabasePlatform()->getName() !== "sqlite") {
+            $projectDir = $this->kernel->getContainer()->getParameter("kernel.project_dir");
+
+            $files = [
+                $projectDir . "/vendor/prooph/pdo-event-store/scripts/mysql/01_event_streams_table.sql",
+                $projectDir . "/vendor/prooph/pdo-event-store/scripts/mysql/02_projections_table.sql",
+                $projectDir . "/vendor/prooph/pdo-snapshot-store/scripts/mysql_snapshot_table.sql",
+            ];
+
+            array_walk($files, function($path) use ($em) {
+                $em->getConnection()->query(file_get_contents($path));
+            });
+
+//            $output = $this->runCommand('event-store:event-stream:create');
+//            Assert::eq($output, "Event stream was created successfully.\n");
+        }
+    }
+
+    protected function runCommand(string $command, array $arguments = []) : string
+    {
+        $application = new Application($this->kernel);
+        $application->setAutoExit(false);
+
+        $input = new ArrayInput(array_merge([
+            'command' => $command
+        ], $arguments));
+
+        $output = new BufferedOutput();
+        $exitCode = $application->run($input, $output);
+
+        if(0 !== $exitCode)
+        {
+            $this->lastException = $output->fetch();
+        }
+
+        return $output->fetch();
+    }
+
 }
