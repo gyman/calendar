@@ -2,6 +2,7 @@
 
 namespace Calendar;
 
+use Calendar\DomainEvents\CalendarCreated;
 use Carbon\Carbon;
 use DateInterval;
 use DatePeriod;
@@ -12,7 +13,7 @@ use Prooph\EventSourcing\AggregateChanged;
 use Prooph\EventSourcing\AggregateRoot;
 use Ramsey\Uuid\UuidInterface;
 
-class Calendar extends AggregateRoot
+final class Calendar extends AggregateRoot
 {
     /** @var UuidInterface */
     protected $id;
@@ -29,13 +30,19 @@ class Calendar extends AggregateRoot
     /** @var DateTime */
     protected $createdAt;
 
-    protected function __construct(UuidInterface $id, string $name, ?Collection $events = null)
+    public static function create(UuidInterface $id, string $name) : Calendar
     {
-        parent::__construct();
+        $calendar = new self();
+        $calendar->recordThat(CalendarCreated::withData($id, $name));
 
-        $this->id = $id;
-        $this->name = $name;
-        $this->events = $events ?? new ArrayCollection();
+        return $calendar;
+    }
+
+    public function whenCalendarCreated(CalendarCreated $event)
+    {
+        $this->id = $event->id();
+        $this->name = $event->name();
+        $this->events = new ArrayCollection();
         $this->createdAt = $this->updatedAt = new DateTime();
     }
 
@@ -117,7 +124,7 @@ class Calendar extends AggregateRoot
         });
     }
 
-    public function events() : array
+    public function events() : Collection
     {
         return $this->events;
     }
@@ -131,5 +138,12 @@ class Calendar extends AggregateRoot
         }
 
         return null;
+    }
+
+    public function toArray() : array
+    {
+        return [
+            "id" => $this->id()->toString()
+        ];
     }
 }

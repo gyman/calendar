@@ -81,6 +81,7 @@
         "psr-4": {
             "App\\": "src/Infrastructure",
             "Calendar\\": "src/Calendar",
+            "Projection\\": "src/Projection",
             "Test\\": "tests"
         },
         "classmap": [

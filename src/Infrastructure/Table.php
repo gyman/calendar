@@ -4,5 +4,6 @@ namespace App;
 
 class Table
 {
-    const EVENT_STREAM_CALENDAR = 'calendar-event-store';
+    const EVENT_STREAM = 'calendar-event-stream';
+    const READ_CALENDAR = 'read_calendars';
 }

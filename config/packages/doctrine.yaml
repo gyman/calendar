@@ -27,6 +27,6 @@ doctrine:
             Calendar:
                 is_bundle: false
                 type: xml
-                dir: '%kernel.project_dir%/config/doctrine/calendar'
+                dir: '%kernel.project_dir%/config/doctrine'
                 prefix: 'Calendar'
                 alias: Calendar

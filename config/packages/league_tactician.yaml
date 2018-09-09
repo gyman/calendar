@@ -13,3 +13,17 @@ tactician:
 # Doctrine transactional middleware, requires additional package - https://github.com/thephpleague/tactician-doctrine
 #                - tactician.middleware.doctrine
                 - tactician.middleware.command_handler
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    Calendar\Handler\CreateCalendarHandler:
+        tags:
+        - {name: tactician.handler, command: 'Calendar\Command\CreateCalendar'}
+
+    Calendar\Handler\CreateEventHandler:
+        tags:
+        - {name: tactician.handler, command: Calendar\Command\CreateEvent }

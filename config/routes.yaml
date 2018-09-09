@@ -1,21 +1,32 @@
-index:
-    path: /
-    controller: App\Controller\DefaultController::indexAction
+calendar.create:
+  path: /calendar
+  controller: App\Controller\CalendarController::create
+  methods: POST
 
-getEvents:
-    path: /get-events
-    controller: App\Controller\DefaultController::getEventsAction
-    options:
-      expose: true
+calendar.get:
+  path: /calendar
+  controller: App\Controller\CalendarController::getCalendar
+  methods: GET
 
-addEvent:
-    path: /add-event
-    controller: App\Controller\DefaultController::addEventAction
-    options:
-      expose: true
-
-updateEvent:
-    path: /update-event/{eventId}
-    controller: App\Controller\DefaultController::updateEventAction
-    options:
-      expose: true
+#
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::indexAction
+#
+#getEvents:
+#    path: /get-events
+#    controller: App\Controller\DefaultController::getEventsAction
+#    options:
+#      expose: true
+#
+#addEvent:
+#    path: /add-event
+#    controller: App\Controller\DefaultController::addEventAction
+#    options:
+#      expose: true
+#
+#updateEvent:
+#    path: /update-event/{eventId}
+#    controller: App\Controller\DefaultController::updateEventAction
+#    options:
+#      expose: true

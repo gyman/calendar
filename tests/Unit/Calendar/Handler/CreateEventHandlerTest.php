@@ -2,7 +2,7 @@
 namespace Test\Unit\Calendar\Handler;
 
 use Calendar\Calendar;
-use Calendar\Command\CreateEvent;
+use Calendar\Command\AddEvent;
 use Calendar\Event\TimeSpan;
 use Calendar\Handler\CreateEventHandler;
 use DateTime;
@@ -28,7 +28,7 @@ class CreateEventHandlerTest extends TestCase
 
         $handler = new CreateEventHandler($calendarRepository, new InMemoryEventRepository($events));
 
-        $handler->handle(CreateEvent::withData(
+        $handler->handle(AddEvent::withData(
             $calendarId,
             "some name",
             new DateTime("2018-01-01"),

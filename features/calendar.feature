@@ -21,7 +21,7 @@ Feature: I can add end manipulate events
     | id                                   | name |
     | 00000000-0000-0000-0000-000000000001 | test |
     Then there is 1 calendars in calendar repository
-    And calendar 'test' has 0 events
+    And calendar '00000000-0000-0000-0000-000000000001' has 0 events
 
   Scenario: Add event to calendar 'test'
     Given I add new 'test' calendar

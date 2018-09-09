@@ -6,7 +6,7 @@ use Calendar\Event\TimeSpan;
 use DateTime;
 use Ramsey\Uuid\UuidInterface;
 
-class CreateEvent
+class AddEvent
 {
     /** @var UuidInterface */
     protected $calendarId;

@@ -8,5 +8,5 @@ prooph_service_bus:
       router:
         type: 'prooph_service_bus.event_bus_router'
         routes:
-          Calendar\Event\CalendarWasCreated:
-          - '@CalendarView\CalendarReadModel'
+          Calendar\DomainEvents\CalendarCreated:
+          - '@Projection\CalendarReadModel'

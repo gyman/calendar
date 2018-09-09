@@ -46,7 +46,7 @@ class WebContext extends AbstractContext
 
     protected function getCalendars(): array
     {
-        $this->get(CalendarViewRepositoryInterface::class)->findAll();
+        return $this->get(CalendarViewRepositoryInterface::class)->findAll();
     }
 
     protected function addEvent(UuidInterface $id, string $name, string $expression, string $hours)
@@ -79,4 +79,11 @@ class WebContext extends AbstractContext
         return $crawler;
     }
 
+    protected function getEvents(UuidInterface $id): array
+    {
+        /** @var Calendar $calendar */
+        $calendar = $this->get(CalendarRepositoryInterface::class)->get($id);
+
+        return $calendar->events()->toArray();
+    }
 }

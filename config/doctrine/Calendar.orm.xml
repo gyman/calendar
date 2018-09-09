@@ -4,26 +4,17 @@
         https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
 
     <entity name="Calendar\Calendar" table="read_calendars" repository-class="App\Repository\CalendarViewRepository" read-only="true">
-
         <id name="id" type="uuid" column="id">
             <generator strategy="NONE"/>
         </id>
 
-        <field name="name" column="name" type="string" length="255" nullable="false" unique="false" />
+        <!--<field name="events" column="events" type="string" length="255" nullable="false" unique="false" />-->
 
-        <one-to-many field="events" target-entity="Calendar\Event" mapped-by="calendar">
-            <cascade>
-                <cascade-persist/>
-            </cascade>
-            <order-by>
-                <order-by-field name="id" direction="ASC" />
-            </order-by>
-        </one-to-many>
+        <field name="name" column="name" type="string" length="255" nullable="false" unique="false" />
 
         <field name="createdAt" column="created_at" type="datetime" nullable="false" unique="false" />
 
         <field name="updatedAt" column="updated_at" type="datetime" nullable="true" unique="false" />
-
     </entity>
 
 </doctrine-mapping>

@@ -6,6 +6,7 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         public: false       # Allows optimizing the container by removing unused services; this also means
+
     App\:
         resource: '../src/Infrastructure/*'
         exclude: '../src/Infrastructure/{Repository,EventDispatcher,DependencyInjection,Entity,Migrations,Tests,Twig,Kernel.php}'
@@ -20,16 +21,5 @@ services:
       arguments:
         - 'Calendar\Calendar'
 
-    App\Repository\EventViewRepository:
-      factory: ["@doctrine.orm.entity_manager", "getRepository"]
-      public: true
-      arguments:
-        - 'Calendar\Event'
-
     Calendar\Repository\CalendarRepositoryInterface: '@App\Repository\CalendarRepository'
     Calendar\Repository\CalendarViewRepositoryInterface: '@App\Repository\CalendarViewRepository'
-    Calendar\Repository\EventRepositoryInterface: '@App\Repository\EventViewRepository'
-
-    Calendar\Handler\CreateEventHandler:
-      tags:
-        - {name: tactician.handler, command: Calendar\Command\CreateEvent }

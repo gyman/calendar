@@ -29,7 +29,7 @@ abstract class AbstractContext implements Context
         $this->kernel = $kernel;
 
         $inMemoryEventStore = $this->get(InMemoryEventStore::class);
-        $inMemoryEventStore->create(new Stream(new StreamName(Table::EVENT_STREAM_CALENDAR), new \ArrayIterator([])));
+        $inMemoryEventStore->create(new Stream(new StreamName(Table::EVENT_STREAM), new \ArrayIterator([])));
 
         $this->truncateTables();
     }
@@ -45,7 +45,7 @@ abstract class AbstractContext implements Context
     public function thereIsCountOfCalendarsInRepository(int $count)
     {
         $calendars = $this->getCalendars();
-        Assert::count(count($calendars), $count);
+        Assert::count($calendars, $count);
     }
 
     /**
@@ -59,7 +59,7 @@ abstract class AbstractContext implements Context
     }
 
     /**
-     * @Given /^calendar "([^"]*)" has (\d+) events$/
+     * @Given /^calendar '([\d-]+)' has (\d+) events$/
      */
     public function calendarHasEvents(string $id, int $eventsCount)
     {
@@ -148,6 +148,8 @@ abstract class AbstractContext implements Context
     abstract protected function addEvent(UuidInterface $fromString, string $name, string $expression, string $hours);
 
     abstract protected function removeEvent(string $id, string $eventName);
+
+    abstract protected function getEvents(UuidInterface $id) : array;
 
     protected function truncateTables()
     {

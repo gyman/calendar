@@ -3,7 +3,7 @@
 namespace Calendar\Handler;
 
 use Calendar\Calendar;
-use Calendar\Command\CreateEvent;
+use Calendar\Command\AddEvent;
 use Calendar\Event;
 use Calendar\Expression\Builder;
 use Calendar\Repository\CalendarViewRepositoryInterface;
@@ -25,7 +25,7 @@ class CreateEventHandler
         $this->eventRepository = $eventRepository;
     }
 
-    public function handle(CreateEvent $command)
+    public function handle(AddEvent $command)
     {
         /** @var Calendar $calendar */
         $calendar = $this->calendarRepository->findById($command->calendarId());

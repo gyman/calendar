@@ -8,7 +8,7 @@ prooph_event_store:
           aggregate_type:           Calendar\Calendar
           aggregate_translator:     Prooph\EventSourcing\EventStoreIntegration\AggregateTranslator
           one_stream_per_aggregate: false
-          stream_name:              !php/const App\Table::EVENT_STREAM_CALENDAR
+          stream_name:              !php/const App\Table::EVENT_STREAM
           snapshot_store:           Prooph\SnapshotStore\Pdo\PdoSnapshotStore
 
   projection_managers:
@@ -22,11 +22,11 @@ prooph_event_store:
 
       projections:
         calendar:
-          read_model:       CalendarView\CalendarReadModel
-          projection:       CalendarView\CalendarProjection
+          read_model:       Projection\CalendarReadModel
+          projection:       Projection\CalendarProjection
         calendar_snapshots:
           read_model:       Prooph\Snapshotter\SnapshotReadModel
-          projection:       CalendarView\CalendarSnapshotProjection
+          projection:       Projection\CalendarSnapshotProjection
 
 services:
   _defaults:
@@ -34,11 +34,9 @@ services:
     autoconfigure: true
     public: false
 
-  CalendarView\CalendarReadModel: ~
-  CalendarView\CalendarProjection:
-    public: true
-  CalendarView\CalendarSnapshotProjection:
-    public: true
+  Projection\CalendarReadModel: ~
+  Projection\CalendarProjection: ~
+  Projection\CalendarSnapshotProjection: ~
 
   Prooph\SnapshotStore\Pdo\PdoSnapshotStore: ~
   Prooph\EventSourcing\EventStoreIntegration\AggregateTranslator: ~
@@ -52,7 +50,7 @@ services:
   # aliasing
 
   Prooph\EventStore\Pdo\PersistenceStrategy:          '@Prooph\EventStore\Pdo\PersistenceStrategy\MySqlSingleStreamStrategy'
-  Prooph\ServiceBus\EventBus:                         '@prooph_service_bus.account'
+  Prooph\ServiceBus\EventBus:                         '@prooph_service_bus.calendar_event_bus'
   Prooph\EventSourcing\Aggregate\AggregateTranslator: '@Prooph\EventSourcing\EventStoreIntegration\AggregateTranslator'
   Prooph\EventStore\TransactionalEventStore:          '@Prooph\EventStore\Pdo\MySqlEventStore'
   Prooph\EventStore\Projection\ProjectionManager:     '@prooph_event_store.projection_manager.default_projection_manager'
@@ -76,4 +74,4 @@ services:
   Prooph\Snapshotter\StreamSnapshotProjection:
     arguments:
       - '@Prooph\EventStore\Pdo\Projection\PdoEventStoreReadModelProjector'
-      - !php/const App\Table::EVENT_STREAM_CALENDAR
+      - !php/const App\Table::EVENT_STREAM
