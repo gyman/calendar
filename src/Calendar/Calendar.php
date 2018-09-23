@@ -7,8 +7,6 @@ use Carbon\Carbon;
 use DateInterval;
 use DatePeriod;
 use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Prooph\EventSourcing\AggregateChanged;
 use Prooph\EventSourcing\AggregateRoot;
 use Ramsey\Uuid\UuidInterface;
@@ -21,8 +19,8 @@ final class Calendar extends AggregateRoot
     /** @var string */
     protected $name;
 
-    /** @var Event[]|array|Collection */
-    protected $events;
+    /** @var Event[]|array */
+    protected $events = [];
 
     /** @var DateTime */
     protected $updatedAt;
@@ -42,7 +40,6 @@ final class Calendar extends AggregateRoot
     {
         $this->id = $event->id();
         $this->name = $event->name();
-        $this->events = new ArrayCollection();
         $this->createdAt = $this->updatedAt = new DateTime();
     }
 
@@ -59,15 +56,14 @@ final class Calendar extends AggregateRoot
         $this->updatedAt = Carbon::now();
     }
 
-
     public function id(): UuidInterface
     {
         return $this->id;
     }
 
-    public function filterEvents(DateTime $date) : Collection
+    public function filterEvents(DateTime $date) : array
     {
-        return $this->events->filter(function(Event $event) use ($date) : bool {
+        return array_filter($this->events, function(Event $event) use ($date) : bool {
             return $event->isMatching($date);
         });
     }
@@ -91,7 +87,9 @@ final class Calendar extends AggregateRoot
 
     public function addEvent(Event $event) : void
     {
-        $this->events->add($event);
+        $this->recordThat(EventAdded::withData($event));
+
+        $this->events[] = $event;
         $this->updatedAt = new DateTime();
     }
 
@@ -112,19 +110,7 @@ final class Calendar extends AggregateRoot
         return $this->name;
     }
 
-    public function count() : int
-    {
-        return count($this->events);
-    }
-
-    public function matchingEvents(DateTime $date) : Collection
-    {
-        return $this->events->filter(function(Event $event) use ($date) : bool {
-            return $event->isMatching($date);
-        });
-    }
-
-    public function events() : Collection
+    public function events() : array
     {
         return $this->events;
     }
@@ -143,7 +129,8 @@ final class Calendar extends AggregateRoot
     public function toArray() : array
     {
         return [
-            "id" => $this->id()->toString()
+            "id" => $this->id()->toString(),
+            "name" => $this->name()
         ];
     }
 }

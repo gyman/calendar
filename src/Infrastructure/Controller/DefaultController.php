@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use Calendar\Calendar;
-use Calendar\Command\AddEvent;
+use Calendar\Command\CreateEvent;
 use Calendar\Command\UpdateEvent;
 use Calendar\Event\TimeSpan;
 use Calendar\Repository\CalendarViewRepositoryInterface;
@@ -54,7 +54,7 @@ class DefaultController extends AbstractController
 
         $calendarId = Uuid::fromString(reset($calendars));
 
-        $command = AddEvent::withData(
+        $command = CreateEvent::withData(
             $calendarId,
             "",
             Carbon::createFromFormat('YmdHi', $request->get('startDate', (new DateTime('now'))->format('YmdHi'))),

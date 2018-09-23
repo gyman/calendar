@@ -1,13 +1,8 @@
 <?php
 
-use Calendar\Calendar;
-use Calendar\Repository\CalendarRepositoryInterface;
-use Calendar\Repository\CalendarViewRepositoryInterface;
-use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\BrowserKit\Client;
 use App\Kernel;
-use Symfony\Component\DomCrawler\Crawler;
 use Webmozart\Assert\Assert;
 
 class WebContext extends AbstractContext
@@ -28,62 +23,66 @@ class WebContext extends AbstractContext
 
     protected function createCalendar(string $id, string $name)
     {
-        $this->call("POST", "/calendar", [
-            "id" => $id,
+        $this->jsonCall("POST", "/calendar/" . $id, [
             "name" => $name
         ]);
     }
 
-    protected function getCalendar(UuidInterface $id): Calendar
+    protected function getCalendarData(UuidInterface $id): array
     {
-        $json = $this->call("GET", "/calendar/" . $id);
+        $this->jsonCall("GET", "/calendar/" . $id);
+        $json = $this->client->getResponse()->getContent();
 
         $data = json_decode($json, JSON_OBJECT_AS_ARRAY);
         Assert::eq(json_last_error(), JSON_ERROR_NONE, 'Error decoding json: ' . $json);
 
-        $this->get(CalendarRepositoryInterface::class)->get(Uuid::fromString($data["id"]));
+        return $data;
     }
 
     protected function getCalendars(): array
     {
-        return $this->get(CalendarViewRepositoryInterface::class)->findAll();
+        return $this->jsonCall("GET", "/calendar");
     }
 
-    protected function addEvent(UuidInterface $id, string $name, string $expression, string $hours)
+    protected function addEvent(string $calendarId, string $eventId, string $name, string $expression, string $hours)
     {
-        $this->call("POST", "/calendar/" . $id . "/event", [
-            "json_data" => json_encode([
+        $this->jsonCall("POST", "/calendar/" . $calendarId . "/event", [
+                "id" => $eventId,
                 "name" => $name,
                 "expression" => $expression,
                 "hours" => $hours
-            ])
         ]);
     }
 
     protected function removeEvent(string $id, string $eventName)
     {
-        $this->call("DELETE", "/calendar/" . $id . "/event/" . $eventName);
+        $this->jsonCall("DELETE", "/calendar/" . $id . "/event/" . $eventName);
     }
 
-    protected function call(string $method, string $url, array $options = []) : Crawler
+    protected function jsonCall(string $method, string $url, array $data = [], array $options = []) : array
     {
-        $crawler = $this->client->request($method, $url, $options, [], [
+        $this->client->request($method, $url, $options, [], [
             "CONTENT_TYPE" => 'application/json'
-        ]);
+        ], json_encode($data));
 
         if(500 === $this->client->getResponse()->getStatusCode()) {
             $response = json_decode($this->client->getResponse()->getContent(), JSON_OBJECT_AS_ARRAY);
             $this->lastException = $response["errors"]["exception"];
         }
 
-        return $crawler;
+        $json = $this->client->getResponse()->getContent();
+
+        $data = json_decode($json, JSON_OBJECT_AS_ARRAY);
+
+        if(json_last_error() !== JSON_ERROR_NONE) {
+            trigger_error('Error decoding json: ' . $json);
+        };
+
+        return $data;
     }
 
-    protected function getEvents(UuidInterface $id): array
+    protected function getEvents(UuidInterface $calendarId): array
     {
-        /** @var Calendar $calendar */
-        $calendar = $this->get(CalendarRepositoryInterface::class)->get($id);
-
-        return $calendar->events()->toArray();
+        return $this->jsonCall("GET", "/calendar/" . $calendarId . "/event");
     }
 }

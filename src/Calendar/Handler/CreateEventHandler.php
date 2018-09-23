@@ -3,47 +3,31 @@
 namespace Calendar\Handler;
 
 use Calendar\Calendar;
-use Calendar\Command\AddEvent;
+use Calendar\Command\CreateEvent;
 use Calendar\Event;
-use Calendar\Expression\Builder;
-use Calendar\Repository\CalendarViewRepositoryInterface;
-use Calendar\Repository\EventRepositoryInterface;
-use Ramsey\Uuid\Uuid;
+use Calendar\Repository\CalendarRepositoryInterface;
 use Webmozart\Assert\Assert;
 
 class CreateEventHandler
 {
-    /** @var CalendarViewRepositoryInterface */
     protected $calendarRepository;
 
-    /** @var EventRepositoryInterface */
-    protected $eventRepository;
-
-    public function __construct(CalendarViewRepositoryInterface $calendarRepository, EventRepositoryInterface $eventRepository)
+    public function __construct(CalendarRepositoryInterface $calendarRepository)
     {
         $this->calendarRepository = $calendarRepository;
-        $this->eventRepository = $eventRepository;
     }
 
-    public function handle(AddEvent $command)
+    public function handle(CreateEvent $command)
     {
         /** @var Calendar $calendar */
-        $calendar = $this->calendarRepository->findById($command->calendarId());
+        $calendar = $this->calendarRepository->get($command->calendarId());
 
         Assert::notNull($calendar, 'Calendar does not exists');
 
-        $expression = Builder::create()
-            ->setStartDate($command->startDate())
-            ->setEndDate($command->endDate())
-            ->setDays($command->days())
-            ->expression()
-        ;
-
-        $event = Event::create(Uuid::uuid4(), $calendar, $command->name(), $expression, $command->timeSpan());
+        $event = Event::create($command->eventId(), $command->name(), $command->expressions(), $command->timeSpan());
 
         $calendar->addEvent($event);
 
         $this->calendarRepository->save($calendar);
-        $this->eventRepository->save($event);
     }
 }

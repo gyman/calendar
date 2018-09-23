@@ -8,7 +8,7 @@
             <generator strategy="NONE"/>
         </id>
 
-        <!--<field name="events" column="events" type="string" length="255" nullable="false" unique="false" />-->
+        <field name="events" column="events" type="json_array" length="255" nullable="true" unique="false" />
 
         <field name="name" column="name" type="string" length="255" nullable="false" unique="false" />
 

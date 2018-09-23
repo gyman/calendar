@@ -61,9 +61,9 @@ abstract class AbstractContext implements Context
     /**
      * @Given /^calendar '([\d-]+)' has (\d+) events$/
      */
-    public function calendarHasEvents(string $id, int $eventsCount)
+    public function calendarHasEvents(string $calendarId, int $eventsCount)
     {
-        $events = $this->getEvents(Uuid::fromString($id));
+        $events = $this->getEvents(Uuid::fromString($calendarId));
 
         Assert::eq(count($events), $eventsCount);
     }
@@ -74,7 +74,7 @@ abstract class AbstractContext implements Context
     public function dateMatchesEventInCalendar(string $date, string $eventName, string $id)
     {
         /** @var Calendar $calendar */
-        $calendar = $this->getCalendar(Uuid::fromString($id));
+        $calendar = $this->getCalendarData(Uuid::fromString($id));
 
         /** @var Event[] $events */
         $events = $calendar->matchingEvents(new DateTime($date));
@@ -84,14 +84,14 @@ abstract class AbstractContext implements Context
     }
 
     /**
-     * @When /^I add to \'([^\']*)\' events:$/
+     * @When /^I add to calendar \'([^\']*)\' events:$/
      */
-    public function iAddEventsToCalendar(string $id, TableNode $table)
+    public function iAddEventsToCalendar(string $calendarId, TableNode $table)
     {
         $hash = $table->getHash();
 
         foreach ($hash as $row) {
-            $this->addEvent(Uuid::fromString($id), $row['name'], $row['expression'], $row['hours']);
+            $this->addEvent(Uuid::fromString($calendarId), $row['id'], $row['name'], $row['expression'], $row['hours']);
         }
     }
 
@@ -106,7 +106,7 @@ abstract class AbstractContext implements Context
         $dateTo = new DateTime($dateTo);
         $dateTo->modify("+1 day");
 
-        $calendar = $this->getCalendar($calendar);
+        $calendar = $this->getCalendarData($calendar);
         $period = new DatePeriod($dateFrom, new DateInterval('P1D'), $dateTo);
 
         $occurrences = $calendar->getOccurrences($dateFrom, $dateTo);
@@ -141,11 +141,11 @@ abstract class AbstractContext implements Context
 
     abstract protected function createCalendar(string $id, string $name);
 
-    abstract protected function getCalendar(UuidInterface $fromString) : Calendar;
+    abstract protected function getCalendarData(UuidInterface $fromString) : array;
 
     abstract protected function getCalendars() : array;
 
-    abstract protected function addEvent(UuidInterface $fromString, string $name, string $expression, string $hours);
+    abstract protected function addEvent(string $calendarId, string $eventId, string $name, string $expression, string $hours);
 
     abstract protected function removeEvent(string $id, string $eventName);
 
@@ -184,6 +184,19 @@ abstract class AbstractContext implements Context
 //            $output = $this->runCommand('event-store:event-stream:create');
 //            Assert::eq($output, "Event stream was created successfully.\n");
         }
+    }
+
+    /**
+     * @Given /^calendar \'([^\']*)\' has data:$/
+     */
+    public function calendarHasData(string $calendarId, TableNode $table)
+    {
+        $calendarData = $this->getCalendarData(Uuid::fromString($calendarId));
+
+        $hash = $table->getHash();
+
+        Assert::eq($calendarData["id"], $hash[0]["id"]);
+        Assert::eq($calendarData["name"], $hash[0]["name"]);
     }
 
     protected function runCommand(string $command, array $arguments = []) : string

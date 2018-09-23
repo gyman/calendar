@@ -6,16 +6,16 @@ use Calendar\Event\TimeSpan;
 use DateTime;
 use Ramsey\Uuid\UuidInterface;
 
-class AddEvent
+class UpdateCalendar
 {
+    /** @var UuidInterface */
+    protected $eventId;
+
     /** @var UuidInterface */
     protected $calendarId;
 
     /** @var string */
     protected $name;
-
-    /** @var DateTime */
-    protected $startDate;
 
     /** @var DateTime|null */
     protected $endDate;
@@ -23,20 +23,16 @@ class AddEvent
     /** @var TimeSpan */
     protected $timeSpan;
 
-    /** @var array */
-    protected $days;
-
-    protected function __construct(?UuidInterface $calendarId = null, ?string $name = "", ?DateTime $startDate = null, ?DateTime $endDate = null, ?TimeSpan $timeSpan = null, ?array $days = [])
+    protected function __construct(?UuidInterface $eventId = null, ?UuidInterface $calendarId = null, ?string $name = null, ?DateTime $endDate = null, ?TimeSpan $timeSpan = null)
     {
+        $this->eventId = $eventId;
         $this->calendarId = $calendarId;
         $this->name = $name;
-        $this->startDate = $startDate;
         $this->endDate = $endDate;
         $this->timeSpan = $timeSpan;
-        $this->days = $days;
     }
 
-    public static function withData(UuidInterface $calendarId, string $name, DateTime $startDate, ?DateTime $endDate, TimeSpan $timeSpan, array $days) : self
+    public static function withData(UuidInterface $eventId, UuidInterface $calendarId, string $name, ?DateTime $endDate, TimeSpan $timeSpan) : self
     {
         return new self(...func_get_args());
     }
@@ -51,14 +47,9 @@ class AddEvent
         return $this->calendarId;
     }
 
-    public function name(): string
+    public function name(): ?string
     {
         return $this->name;
-    }
-
-    public function startDate(): ?DateTime
-    {
-        return $this->startDate;
     }
 
     public function endDate(): ?DateTime
@@ -71,8 +62,8 @@ class AddEvent
         return $this->timeSpan;
     }
 
-    public function days(): array
+    public function eventId(): ?UuidInterface
     {
-        return $this->days;
+        return $this->eventId;
     }
 }

@@ -16,29 +16,28 @@ use Webmozart\Assert\Assert;
 
 class CalendarController extends AbstractController
 {
-    public function create(Request $request, CommandBus $bus) : Response
+    public function create(CommandBus $bus, Uuid $calendarId, string $name) : Response
     {
-        $uuid = $request->get("id");
-        $name = $request->get("name");
-
-        Assert::uuid($uuid);
-        Assert::notEmpty($name);
-
-        $bus->handle(new CreateCalendar(Uuid::fromString($uuid), $name));
+        $bus->handle(new CreateCalendar($calendarId, $name));
 
         return new JsonResponse([], Response::HTTP_CREATED);
     }
 
-    public function getCalendar(Request $request, CalendarViewRepositoryInterface $repository) : Response
+    public function getCalendar(CalendarViewRepositoryInterface $repository, Uuid $calendarId) : Response
     {
-        $uuid = $request->get("id");
-
-        Assert::uuid($uuid);
-
-        $calendar = $repository->findById(Uuid::fromString($uuid));
+        $calendar = $repository->find($calendarId);
 
         Assert::notNull($calendar);
 
         return new JsonResponse($calendar->toArray(), Response::HTTP_CREATED);
+    }
+
+    public function list(CalendarViewRepositoryInterface $repository) : Response
+    {
+        $calendars = $repository->findAll();
+
+        return new JsonResponse(array_map(function(Calendar $calendar) : array {
+            return $calendar->toArray();
+        }, $calendars), Response::HTTP_CREATED);
     }
 }

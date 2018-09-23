@@ -1,11 +1,26 @@
 calendar.create:
-  path: /calendar
+  path: /calendar/{calendarId}
   controller: App\Controller\CalendarController::create
   methods: POST
 
 calendar.get:
-  path: /calendar
+  path: /calendar/{calendarId}
   controller: App\Controller\CalendarController::getCalendar
+  methods: GET
+
+calendar.list:
+  path: /calendar
+  controller: App\Controller\CalendarController::list
+  methods: GET
+
+event.create:
+  path: /calendar/{calendarId}/event
+  controller: App\Controller\EventController::create
+  methods: POST
+
+event.get:
+  path: /calendar/{calendarId}/event
+  controller: App\Controller\EventController::getEvent
   methods: GET
 
 #

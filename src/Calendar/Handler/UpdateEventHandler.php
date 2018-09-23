@@ -3,7 +3,7 @@
 namespace Calendar\Handler;
 
 use Calendar\Calendar;
-use Calendar\Command\AddEvent;
+use Calendar\Command\CreateEvent;
 use Calendar\Command\UpdateEvent;
 use Calendar\Event;
 use Calendar\Expression\Builder;

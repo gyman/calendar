@@ -26,4 +26,4 @@ services:
 
     Calendar\Handler\CreateEventHandler:
         tags:
-        - {name: tactician.handler, command: Calendar\Command\CreateEvent }
+        - {name: tactician.handler, command: 'Calendar\Command\CreateEvent' }

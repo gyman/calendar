@@ -23,3 +23,15 @@ services:
 
     Calendar\Repository\CalendarRepositoryInterface: '@App\Repository\CalendarRepository'
     Calendar\Repository\CalendarViewRepositoryInterface: '@App\Repository\CalendarViewRepository'
+
+    App\Listener\JsonRequest:
+        tags:
+        - { name: kernel.event_listener, event: kernel.request }
+
+    App\Listener\ExceptionToJson:
+        arguments:
+        - '%kernel.debug%'
+        - '@logger'
+        tags:
+        - {name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+        - { name: monolog.logger }

@@ -21,4 +21,5 @@ return [
     Liip\FunctionalTestBundle\LiipFunctionalTestBundle::class => ['all' => true],
     Liip\MonitorBundle\LiipMonitorBundle::class => ['all' => true],
     FOS\UserBundle\FOSUserBundle::class => ['all' => true],
+    Mcfedr\UuidParamConverterBundle\McfedrUuidParamConverterBundle::class => ['all' => true],
 ];

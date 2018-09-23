@@ -4,7 +4,7 @@ use App\Kernel;
 use App\Repository\CalendarViewRepository;
 use App\Repository\EventViewRepository;
 use Behat\Gherkin\Node\TableNode;
-use Calendar\Command\AddEvent;
+use Calendar\Command\CreateEvent;
 use Calendar\Event\TimeSpan;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -49,7 +49,7 @@ class FunctionalContext extends IntegrationContext
         foreach ($hash as $row) {
             list($startDate, $endDate, $days) = $this->parseExpression($row['expression']);
 
-            $this->get('tactician.commandbus.default')->handle(AddEvent::withData(
+            $this->get('tactician.commandbus.default')->handle(CreateEvent::withData(
                 $calendar->id(),
                 $row['name'],
                 $startDate ?? new DateTime,

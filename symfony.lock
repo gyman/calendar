@@ -200,6 +200,9 @@
     "marc-mabe/php-enum": {
         "version": "v3.0.1"
     },
+    "mcfedr/uuid-paramconverter": {
+        "version": "2.3.1"
+    },
     "monolog/monolog": {
         "version": "1.23.0"
     },

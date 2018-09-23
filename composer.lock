@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2731d4ae6b4bd44fb1407f5b109dc7e4",
+    "content-hash": "fdf8c3d91c405c777a86e2e7b8ec4b63",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2281,6 +2281,62 @@
                 "typehint"
             ],
             "time": "2018-05-22T10:45:45+00:00"
+        },
+        {
+            "name": "mcfedr/uuid-paramconverter",
+            "version": "2.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mcfedr/uuid-paramconverter.git",
+                "reference": "342ead4fcc327bb88f80ea43b4a91e2c708c51ec"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mcfedr/uuid-paramconverter/zipball/342ead4fcc327bb88f80ea43b4a91e2c708c51ec",
+                "reference": "342ead4fcc327bb88f80ea43b4a91e2c708c51ec",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.9",
+                "ramsey/uuid": "^3.0",
+                "sensio/framework-extra-bundle": "^3.0|^4.0|^5.0",
+                "symfony/framework-bundle": "^2.8|^3.0|^4.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.2",
+                "phpunit/phpunit": "^4.3|^5.3",
+                "symfony/browser-kit": "^3.0|^4.0",
+                "symfony/monolog-bundle": "^3.0"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Mcfedr\\UuidParamConverterBundle\\": "src/Mcfedr/UuidParamConverterBundle/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fred Cox",
+                    "email": "mcfedr@gmail.com"
+                }
+            ],
+            "description": "A sensi paramconverter for receiving uuids as url params",
+            "homepage": "https://github.com/mcfedr/uuid-paramconverter",
+            "keywords": [
+                "bundle",
+                "converter",
+                "guid",
+                "identifier",
+                "param",
+                "paramconverter",
+                "symfony",
+                "uuid"
+            ],
+            "time": "2018-02-23T13:14:25+00:00"
         },
         {
             "name": "monolog/monolog",
@@ -5474,17 +5530,6 @@
         {
             "name": "symfony/lts",
             "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/lts.git",
-                "reference": "6de50b244bad631a71544b3cc3c8e206c0e5f991"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/lts/zipball/6de50b244bad631a71544b3cc3c8e206c0e5f991",
-                "reference": "6de50b244bad631a71544b3cc3c8e206c0e5f991",
-                "shasum": ""
-            },
             "conflict": {
                 "symfony/asset": ">=5",
                 "symfony/browser-kit": ">=5",
@@ -5562,6 +5607,7 @@
             ],
             "description": "Enforces Long Term Supported versions of Symfony components",
             "homepage": "https://symfony.com",
+            "abandoned": "symfony/flex",
             "time": "2018-04-03T05:04:16+00:00"
         },
         {
