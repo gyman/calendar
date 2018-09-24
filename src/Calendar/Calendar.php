@@ -3,6 +3,7 @@
 namespace Calendar;
 
 use Calendar\DomainEvents\CalendarCreated;
+use Calendar\DomainEvents\EventCreated;
 use Carbon\Carbon;
 use DateInterval;
 use DatePeriod;
@@ -40,7 +41,13 @@ final class Calendar extends AggregateRoot
     {
         $this->id = $event->id();
         $this->name = $event->name();
-        $this->createdAt = $this->updatedAt = new DateTime();
+        $this->createdAt = $this->updatedAt = $event->createdAt();
+    }
+
+    public function whenEventCreated(EventCreated $event)
+    {
+        $this->events[] = Event::create($event->id(), $event->name(), $event->expression(), $event->timespan());
+        $this->updatedAt = $event->createdAt();
     }
 
     protected function aggregateId(): string
@@ -87,10 +94,7 @@ final class Calendar extends AggregateRoot
 
     public function addEvent(Event $event) : void
     {
-        $this->recordThat(EventAdded::withData($event));
-
-        $this->events[] = $event;
-        $this->updatedAt = new DateTime();
+        $this->recordThat(EventCreated::withEvent($this->id(), $event));
     }
 
     public function removeEvent(Event $event) : void

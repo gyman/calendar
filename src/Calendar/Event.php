@@ -82,4 +82,14 @@ class Event
     {
         return $this->timespan;
     }
+
+    public function toArray() : array
+    {
+        return [
+            "id" => $this->id()->toString(),
+            "name" => $this->name(),
+            "expression" => (string) $this->expression,
+            "timespan" => (string) $this->timespan()
+        ];
+    }
 }

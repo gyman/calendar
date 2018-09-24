@@ -10,3 +10,5 @@ prooph_service_bus:
         routes:
           Calendar\DomainEvents\CalendarCreated:
           - '@Projection\CalendarReadModel'
+          Calendar\DomainEvents\EventCreated:
+          - '@Projection\CalendarReadModel'

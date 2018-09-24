@@ -5,6 +5,7 @@ namespace Projection;
 use App\Table;
 use Calendar\Calendar;
 use Calendar\DomainEvents\CalendarCreated;
+use Calendar\DomainEvents\EventCreated;
 use DateTime;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
@@ -83,120 +84,23 @@ class CalendarReadModel extends AbstractReadModel
 
     protected function onCalendarCreated(CalendarCreated $event): void
     {
-        $result = $this->connection->insert(Table::READ_CALENDAR, [
-            'id' => $event->id(),
+        $this->connection->insert(Table::READ_CALENDAR, [
+            'calendar_id' => $event->id(),
             'name' => $event->name(),
             'created_at' => $event->createdAt()->format(self::DATE_FORMAT),
             'updated_at' => $event->createdAt()->format(self::DATE_FORMAT),
         ]);
-
-        if (1 !== $result) {
-            throw new Exception('Calendar was not inserted into read model!');
-        }
     }
-//
-//    protected function onCreditWasMade(CreditWasMade $event): void
-//    {
-//        $accountId = $event->accountId();
-//
-//        $newBalance = $event->balance() + $event->amount();
-//        $newAvailableBalance = $event->availableBalance() + $event->amount();
-//
-//        $this->connection->update(Table::ACCOUNT, [
-//            'balance' => $newBalance,
-//            'available_balance' => $newAvailableBalance,
-//        ], ['id' => $accountId]);
-//
-//        $this->connection->insert(Table::CREDIT, [
-//            'account_id' => $accountId,
-//            'amount' => $event->amount(),
-//            'balance_after' => $newBalance,
-//            'created_at' => $event->createdAt()->format(self::DATE_FORMAT),
-//            'updated_at' => $event->createdAt()->format(self::DATE_FORMAT),
-//            'id' => $event->creditId()->toString(),
-//        ]);
-//    }
-//
-//    protected function onDebitWasMade(DebitWasMade $event): void
-//    {
-//        $accountId = $event->aggregateId();
-//
-//        $newBalance = $event->balance() - $event->amount();
-//
-//        $this->connection->update(Table::ACCOUNT, [
-//            'balance' => $newBalance,
-//            'available_balance' => $event->availableBalance(),
-//            'updated_at' => $event->createdAt()->format(self::DATE_FORMAT),
-//        ], ['id' => $accountId]);
-//
-//        $this->connection->insert(Table::DEBIT, [
-//            'account_id' => $accountId,
-//            'amount' => $event->amount(),
-//            'balance_after' => $newBalance,
-//            'created_at' => $event->createdAt()->format(self::DATE_FORMAT),
-//            'updated_at' => $event->createdAt()->format(self::DATE_FORMAT),
-//            'id' => $event->debitId()->toString(),
-//        ]);
-//
-//        $newId = $event->newId();
-//
-//        if (null !== $newId) {
-//            $lock = $this->connection->executeQuery(
-//                sprintf(
-//                    'SELECT l.amount FROM %s as l WHERE l.id = "%s" LIMIT 1',
-//                    Table::LOCK,
-//                    $event->lockId()->toString()
-//                )
-//            )->fetch(PDO::FETCH_ASSOC);
-//
-//            $newLockAmount = $lock['amount'] - $event->amount();
-//
-//            if ($newLockAmount > 0) {
-//                $this->connection->insert(Table::LOCK, [
-//                    'account_id' => $accountId,
-//                    'amount' => $newLockAmount,
-//                    'created_at' => $event->createdAt()->format(self::DATE_FORMAT),
-//                    'updated_at' => $event->createdAt()->format(self::DATE_FORMAT),
-//                    'id' => $newId,
-//                ]);
-//            }
-//        }
-//
-//        $this->connection->delete(Table::LOCK, ['id' => $event->lockId()]);
-//    }
-//
-//    protected function onFundsGotLocked(FundsGotLocked $event): void
-//    {
-//        $accountId = Uuid::fromString($event->aggregateId());
-//
-//        $newAvailableBalance = $event->availableBalance() - $event->amount();
-//
-//        $this->connection->update(Table::ACCOUNT, [
-//            'available_balance' => $newAvailableBalance,
-//            'updated_at' => (new DateTime())->format(self::DATE_FORMAT),
-//        ], ['id' => $accountId]);
-//
-//        $this->connection->insert(Table::LOCK, [
-//            'account_id' => $accountId,
-//            'amount' => $event->amount(),
-//            'created_at' => $event->createdAt()->format(self::DATE_FORMAT),
-//            'updated_at' => $event->createdAt()->format(self::DATE_FORMAT),
-//            'id' => $event->lockId()->toString(),
-//        ]);
-//    }
-//
-//    protected function onFundsGotUnlocked(FundsGotUnlocked $event): void
-//    {
-//        $accountId = Uuid::fromString($event->aggregateId());
-//
-//        $this->connection->update(Table::ACCOUNT, [
-//            'balance' => $event->balance(),
-//            'available_balance' => $event->availableBalance(),
-//            //            'updated_at' => $event->createdAt()->format(self::DATE_FORMAT)
-//        ], ['id' => $accountId]);
-//
-//        $this->connection->delete(Table::LOCK, [
-//            'id' => $event->lockId()->toString(),
-//        ]);
-//    }
+
+    protected function onEventCreated(EventCreated $event): void
+    {
+        $this->connection->insert(Table::READ_EVENT, [
+            'event_id' => $event->id(),
+            'calendar_id' => $event->aggregateId(),
+            'name' => $event->name(),
+            'expression' => (string) $event->expression(),
+            'timespan' => (string) $event->timespan()
+        ]);
+    }
+
 }
