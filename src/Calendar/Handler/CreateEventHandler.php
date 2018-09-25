@@ -24,7 +24,7 @@ class CreateEventHandler
 
         Assert::notNull($calendar, 'Calendar does not exists');
 
-        $event = Event::create($command->eventId(), $command->name(), $command->expressions(), $command->timeSpan());
+        $event = Event::create($command->eventId(), $calendar, $command->name(), $command->expressions(), $command->timeSpan());
 
         $calendar->addEvent($event);
 

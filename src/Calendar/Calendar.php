@@ -46,7 +46,7 @@ final class Calendar extends AggregateRoot
 
     public function whenEventCreated(EventCreated $event)
     {
-        $this->events[] = Event::create($event->id(), $event->name(), $event->expression(), $event->timespan());
+        $this->events[] = Event::create($event->id(), $this, $event->name(), $event->expression(), $event->timespan());
         $this->updatedAt = $event->createdAt();
     }
 

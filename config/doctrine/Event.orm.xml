@@ -3,16 +3,19 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
         https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
 
-    <entity name="Calendar\Calendar" table="read_calendars" repository-class="App\Repository\CalendarViewRepository" read-only="true">
-        <id name="id" type="uuid" column="calendar_id">
+    <entity name="Calendar\Event" table="read_events" repository-class="App\Repository\EventViewRepository" read-only="true">
+        <id name="id" type="uuid" column="event_id">
             <generator strategy="NONE"/>
         </id>
 
+        <many-to-one field="calendar" target-entity="Calendar\Calendar" />
+
         <field name="name" column="name" type="string" length="255" nullable="false" unique="false" />
 
-        <field name="createdAt" column="created_at" type="datetime" nullable="false" unique="false" />
+        <field name="expression" column="expression" type="string" nullable="true" unique="false" />
 
-        <field name="updatedAt" column="updated_at" type="datetime" nullable="true" unique="false" />
+        <field name="timespan" column="timespan" type="string" length="12" nullable="true" unique="false" />
+
     </entity>
 
 </doctrine-mapping>

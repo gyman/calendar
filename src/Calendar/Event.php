@@ -14,6 +14,9 @@ class Event
     /** @var UuidInterface */
     protected $id;
 
+    /** @var Calendar */
+    protected $calendar;
+
     /** @var string */
     protected $name;
 
@@ -29,18 +32,19 @@ class Event
     /** @var DateTime */
     protected $createdAt;
 
-    public function __construct(UuidInterface $id, string $name, ExpressionInterface $expression, TimeSpan $time)
+    protected function __construct(UuidInterface $id, Calendar $calendar, string $name, ExpressionInterface $expression, TimeSpan $time)
     {
         $this->id = $id;
+        $this->calendar = $calendar;
         $this->name = $name;
         $this->expression = $expression;
         $this->timespan = $time;
         $this->createdAt = $this->updatedAt = new DateTime();
     }
 
-    public static function create(UuidInterface $id, string $name, string $expression, string $time)
+    public static function create(UuidInterface $id, Calendar $calendar, string $name, string $expression, string $time) : self
     {
-        return new self($id, $name, Parser::fromString($expression), TimeSpan::fromString($time));
+        return new self($id, $calendar, $name, Parser::fromString($expression), TimeSpan::fromString($time));
     }
 
     public function isMatching(DateTime $date) : bool
@@ -87,6 +91,7 @@ class Event
     {
         return [
             "id" => $this->id()->toString(),
+            "calendar" => $this->calendar->id()->toString(),
             "name" => $this->name(),
             "expression" => (string) $this->expression,
             "timespan" => (string) $this->timespan()
