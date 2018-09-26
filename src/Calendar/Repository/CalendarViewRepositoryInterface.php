@@ -2,12 +2,12 @@
 
 namespace Calendar\Repository;
 
-use Calendar\Calendar;
+use Calendar\View\CalendarView;
 use Ramsey\Uuid\UuidInterface;
 
 interface CalendarViewRepositoryInterface
 {
-    public function findByName(string $name): ?Calendar;
+    public function findByName(string $name): ?CalendarView;
 
-    public function findById(UuidInterface $fromString) : ?Calendar;
+    public function findById(UuidInterface $fromString) : ?CalendarView;
 }

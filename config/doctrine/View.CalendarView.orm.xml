@@ -3,10 +3,12 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
         https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
 
-    <entity name="Calendar\Calendar" table="read_calendars" repository-class="App\Repository\CalendarViewRepository" read-only="true">
+    <entity name="Calendar\View\CalendarView" table="read_calendars" repository-class="App\Repository\CalendarViewRepository" read-only="true">
         <id name="id" type="uuid" column="calendar_id">
             <generator strategy="NONE"/>
         </id>
+
+        <one-to-many field="events" target-entity="Calendar\Event" mapped-by="calendar" />
 
         <field name="name" column="name" type="string" length="255" nullable="false" unique="false" />
 

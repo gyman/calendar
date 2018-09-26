@@ -33,7 +33,7 @@ class TimeSpan
 
     public static function fromString(string $string) : self
     {
-        Assert::regex($string, "@\d{2}:\d{2}-\d{2}:\d{2}@");
+        Assert::regex($string, "@\d{2}:\d{2}-\d{2}:\d{2}@", 'This is not a correct timespan expression, should be in 00:00-00:00 format.');
 
         list($start, $end) = explode("-", $string);
 

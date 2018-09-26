@@ -34,6 +34,6 @@ class EventCreated extends AggregateChanged
 
     public function timespan(): TimeSpan
     {
-        return TimeSpan::fromString($this->payload['expression']);
+        return TimeSpan::fromString($this->payload['timespan']);
     }
 }

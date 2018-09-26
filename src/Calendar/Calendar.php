@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use DateInterval;
 use DatePeriod;
 use DateTime;
+use Doctrine\Common\Collections\Collection;
 use Prooph\EventSourcing\AggregateChanged;
 use Prooph\EventSourcing\AggregateRoot;
 use Ramsey\Uuid\UuidInterface;
@@ -20,7 +21,7 @@ final class Calendar extends AggregateRoot
     /** @var string */
     protected $name;
 
-    /** @var Event[]|array */
+    /** @var Event[]|Collection */
     protected $events = [];
 
     /** @var DateTime */
@@ -114,7 +115,7 @@ final class Calendar extends AggregateRoot
         return $this->name;
     }
 
-    public function events() : array
+    public function events() : Collection
     {
         return $this->events;
     }

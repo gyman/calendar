@@ -78,8 +78,7 @@ class CalendarReadModel extends AbstractReadModel
     {
         $method = 'on' . get_class_last_part($event);
         $this->$method($event);
-
-//        $this->em->clear(Calendar::class);
+        $this->em->clear(Calendar::class);
     }
 
     protected function onCalendarCreated(CalendarCreated $event): void
