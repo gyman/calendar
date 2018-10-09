@@ -20,42 +20,36 @@ class CalendarTest extends TestCase
 
     public function testFilterEvents()
     {
-        $collection = new ArrayCollection();
+        $calendar = Calendar::create(Uuid::uuid4(), 'test');
 
-        $calendar = new Calendar(Uuid::uuid4(), 'test', $collection);
+        $eventId1 = Uuid::uuid4();
+        $eventId2 = Uuid::uuid4();
+        $eventId3 = Uuid::uuid4();
 
-        $event1 = new Event(Uuid::uuid4(),$calendar, 'test', DayOfWeek::monday(),  TimeSpan::fromString("12:00-13:00"));
-        $event2 = new Event(Uuid::uuid4(),$calendar, 'test', DayOfWeek::tuesday(),  TimeSpan::fromString("12:00-13:00"));
-        $event3 = new Event(Uuid::uuid4(),$calendar, 'test', Parser::fromString("monday or tuesday or wednesday or thursday or friday or saturday or sunday"),  TimeSpan::fromString("12:00-13:00"));
-
-        $collection->add($event1);
-        $collection->add($event2);
-        $collection->add($event3);
+        $calendar->addEvent(Event::create($eventId1,'test', "monday",  "12:00-13:00"));
+        $calendar->addEvent(Event::create($eventId2,'test', "tuesday",  "12:00-13:00"));
+        $calendar->addEvent(Event::create($eventId3,'test', "monday or tuesday or wednesday or thursday or friday or saturday or sunday",  "12:00-13:00"));
 
         $result = $calendar->filterEvents(new DateTime("last monday"));
 
         $this->assertCount(2, $result);
-        $this->assertEquals($event1, $result[0]);
-        $this->assertEquals($event3, $result[2]);
+        $this->assertEquals($eventId1, $result[0]->id());
+        $this->assertEquals($eventId3, $result[2]->id());
     }
 
     public function testAddEvent()
     {
-        $collection = new ArrayCollection([]);
-        $calendar = new Calendar(Uuid::uuid4(), 'test', $collection);
-        $calendar->addEvent(new Event(Uuid::uuid4(), $calendar, 'test', Parser::fromString("monday or tuesday or wednesday or thursday or friday or saturday or sunday"),  TimeSpan::fromString("12:00-13:00")));
+        $calendar = Calendar::create(Uuid::uuid4(), 'test');
+        $calendar->addEvent(Event::create(Uuid::uuid4(), 'test', "monday or tuesday or wednesday or thursday or friday or saturday or sunday", "12:00-13:00"));
 
-        $this->assertCount(1, $collection);
+        $this->assertCount(1, $calendar->events());
     }
 
     public function testGetOccurrences()
     {
-        $collection = new ArrayCollection();
-        $calendar = new Calendar(Uuid::uuid4(), 'test', $collection);
+        $calendar = Calendar::create(Uuid::uuid4(), 'test');
 
-        $event = new Event(Uuid::uuid4(), $calendar, 'test', DayOfWeek::monday(), TimeSpan::fromString("12:00-13:00"));
-
-        $collection->add($event);
+        $calendar->addEvent(Event::create(Uuid::uuid4(), 'test', "monday", "12:00-13:00"));
 
         $result = $calendar->getOccurrences(new DateTime("01.06.2018"), new DateTime("30.06.2018"));
 
@@ -68,13 +62,9 @@ class CalendarTest extends TestCase
 
     public function testGetOccurrencesEmptyResult()
     {
-        $collection = new ArrayCollection();
+        $calendar = Calendar::create(Uuid::uuid4(),'test');
 
-        $calendar = new Calendar(Uuid::uuid4(),'test',  $collection);
-
-        $event = new Event(Uuid::uuid4(), $calendar, 'test', DayOfWeek::monday(), TimeSpan::fromString("12:00-13:00"));
-
-        $collection->add($event);
+        $calendar->addEvent(Event::create(Uuid::uuid4(), 'test', "monday", "12:00-13:00"));
 
         $result = $calendar->getOccurrences(new DateTime("last tuesday"), new DateTime("last tuesday"));
 
@@ -83,19 +73,17 @@ class CalendarTest extends TestCase
 
     public function testGetOccurrencesOnSmallerPeriod()
     {
-        $collection = new ArrayCollection();
+        $calendar = Calendar::create(Uuid::uuid4(), 'test');
 
-        $calendar = new Calendar(Uuid::uuid4(), 'test', $collection);
-
-        $event = new Event(Uuid::uuid4(), $calendar, 'test', new AndOperator(
+        $event = Event::create(Uuid::uuid4(), 'test', new AndOperator(
             DayOfWeek::monday(),
             new AndOperator(
                 new After(new DateTime("01.01.2018")),
                 new Before(new DateTime("31.12.2018"))
             )
-        ), TimeSpan::fromString("12:00-13:00"));
+        ), "12:00-13:00");
 
-        $collection->add($event);
+        $calendar->addEvent($event);
 
         $result = $calendar->getOccurrences(new DateTime("01.06.2018"), new DateTime("30.06.2018"));
 
@@ -108,19 +96,17 @@ class CalendarTest extends TestCase
 
     public function testGetOccurrencesOnBiggerPeriod()
     {
-        $collection = new ArrayCollection();
+        $calendar = Calendar::create(Uuid::uuid4(),'test');
 
-        $calendar = new Calendar(Uuid::uuid4(),'test',  $collection);
-
-        $event = new Event(Uuid::uuid4(), $calendar,'test', new AndOperator(
+        $event = Event::create(Uuid::uuid4(),'test', new AndOperator(
             DayOfWeek::monday(),
             new AndOperator(
                 new After(new DateTime("01.06.2018")),
                 new Before(new DateTime("30.06.2018"))
             )
-        ), TimeSpan::fromString("12:00-13:00"));
+        ), "12:00-13:00");
 
-        $collection->add($event);
+        $calendar->addEvent($event);
 
         $result = $calendar->getOccurrences(new DateTime("01.01.2018"), new DateTime("31.12.2018"));
 

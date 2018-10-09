@@ -5,6 +5,7 @@ namespace Calendar;
 use Calendar\Event\TimeSpan;
 use Calendar\Expression\ExpressionInterface;
 use Calendar\Expression\Parser;
+use Calendar\View\CalendarView;
 use DateTime;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
@@ -14,37 +15,38 @@ class Event
     /** @var UuidInterface */
     protected $id;
 
-    /** @var Calendar */
-    protected $calendar;
-
     /** @var string */
     protected $name;
 
-    /** @var ExpressionInterface */
+    /** @var ExpressionInterface|null */
     protected $expression;
 
-    /** @var TimeSpan */
+    /** @var TimeSpan|null */
     protected $timespan;
 
-    /** @var DateTime */
-    protected $updatedAt;
-
-    /** @var DateTime */
-    protected $createdAt;
-
-    protected function __construct(UuidInterface $id, Calendar $calendar, string $name, ExpressionInterface $expression, TimeSpan $time)
+    protected function __construct(UuidInterface $id, string $name, ?ExpressionInterface $expression = null, ?TimeSpan $time = null)
     {
         $this->id = $id;
-        $this->calendar = $calendar;
         $this->name = $name;
         $this->expression = $expression;
         $this->timespan = $time;
-        $this->createdAt = $this->updatedAt = new DateTime();
     }
 
-    public static function create(UuidInterface $id, Calendar $calendar, string $name, string $expression, string $time) : self
+    public static function create(UuidInterface $id, string $name, $expression, $time) : self
     {
-        return new self($id, $calendar, $name, Parser::fromString($expression), TimeSpan::fromString($time));
+        if(null !== $expression) {
+            if(false === ($expression instanceof ExpressionInterface)) {
+                $expression  = Parser::fromString((string) $expression);
+            }
+        }
+
+        if(null !== $time) {
+            if(false === ($time instanceof TimeSpan)) {
+                $time = TimeSpan::fromString((string) $time);
+            }
+        }
+
+        return new self($id, $name, $expression, $time);
     }
 
     public function isMatching(DateTime $date) : bool
@@ -77,24 +79,18 @@ class Event
         return $this->id;
     }
 
-    public function updateExpression(ExpressionInterface $expression)
+    public function updateExpression(ExpressionInterface $expression) : void
     {
         $this->expression = $expression;
     }
 
-    public function timespan() : TimeSpan
+    public function timespan() : ?TimeSpan
     {
         return $this->timespan;
     }
 
-    public function toArray() : array
+    public function expression() : ?ExpressionInterface
     {
-        return [
-            "id" => $this->id()->toString(),
-            "calendar" => $this->calendar->id()->toString(),
-            "name" => $this->name(),
-            "expression" => (string) $this->expression,
-            "timespan" => (string) $this->timespan()
-        ];
+        return $this->expression;
     }
 }

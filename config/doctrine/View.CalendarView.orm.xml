@@ -8,13 +8,9 @@
             <generator strategy="NONE"/>
         </id>
 
-        <one-to-many field="events" target-entity="Calendar\Event" mapped-by="calendar" />
+        <one-to-many field="events" target-entity="Calendar\View\EventView" mapped-by="calendar" />
 
         <field name="name" column="name" type="string" length="255" nullable="false" unique="false" />
-
-        <field name="createdAt" column="created_at" type="datetime" nullable="false" unique="false" />
-
-        <field name="updatedAt" column="updated_at" type="datetime" nullable="true" unique="false" />
     </entity>
 
 </doctrine-mapping>

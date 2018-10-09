@@ -2,15 +2,16 @@
 
 namespace Test;
 
-use Calendar\Calendar;
 use Calendar\Event;
 use Calendar\Event\TimeSpan;
 use Calendar\Expression\Builder;
+use Calendar\View\CalendarView;
+use Calendar\View\EventView;
 use DateTime;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
-class TestEvents
+class TestEventView
 {
     private const DEFAULT_NAME = 'event_test';
     private const DEFAULT_STARTDATE = "now";
@@ -24,7 +25,7 @@ class TestEvents
     /** @var string */
     protected $name;
 
-    /** @var Calendar */
+    /** @var CalendarView */
     protected $calendar;
 
     /** @var array|string[] */
@@ -44,7 +45,7 @@ class TestEvents
     {
         $this->id = Uuid::uuid4();
         $this->name = self::DEFAULT_NAME;
-        $this->calendar = new Calendar(Uuid::uuid4(), "");
+        $this->calendar = new CalendarView(Uuid::uuid4(), "");
         $this->expression = null;
         $this->after = self::DEFAULT_STARTDATE;
         $this->before = self::DEFAULT_ENDDATE;
@@ -70,7 +71,7 @@ class TestEvents
         return $this;
     }
 
-    public function withCalendar(Calendar $calendar) : self
+    public function withCalendar(CalendarView $calendar) : self
     {
         $this->calendar = $calendar;
 
@@ -105,7 +106,7 @@ class TestEvents
         return $this;
     }
 
-    public function event() : Event
+    public function event() : EventView
     {
         $expression = Builder::create()
             ->setStartDate(new DateTime($this->after))
@@ -113,7 +114,7 @@ class TestEvents
             ->setDays($this->days)
             ->expression();
 
-        return new Event($this->id, $this->calendar, $this->name, $expression, $this->time);
+        return new EventView($this->id, $this->calendar, $this->name, $expression, $this->time);
     }
 
     public function everyDay() : self

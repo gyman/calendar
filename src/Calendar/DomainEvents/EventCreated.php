@@ -14,7 +14,12 @@ class EventCreated extends AggregateChanged
 {
     public static function withEvent(UuidInterface $calendarId, Event $event): self
     {
-        return self::occur($calendarId, $event->toArray());
+        return self::occur($calendarId, [
+            "id" => $event->id(),
+            "name" => $event->name(),
+            "expression" => (string) $event->expression(),
+            "timespan" => (string) $event->timespan()
+        ]);
     }
 
     public function id(): UuidInterface

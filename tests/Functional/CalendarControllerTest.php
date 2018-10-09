@@ -3,11 +3,12 @@
 namespace Test\Functional;
 
 use Calendar\Calendar;
+use Calendar\View\CalendarView;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Test\TestEvents;
+use Test\TestEventView;
 
 class CalendarControllerTest extends WebTestCase
 {
@@ -29,13 +30,15 @@ class CalendarControllerTest extends WebTestCase
     {
         $em = static::$kernel->getContainer()->get('doctrine')->getManager();
 
-        $calendar = new Calendar(Uuid::uuid4(), "moj testowy");
-        $event = TestEvents::create()
+        $calendar = new CalendarView(Uuid::uuid4(), "moj testowy");
+        $event = TestEventView::create()
             ->everyDay()
             ->withStart("2017-01-01")
             ->withEnd("2017-01-07")
             ->withCalendar($calendar)
             ->event();
+
+
 
         $em->persist($calendar);
         $em->persist($event);

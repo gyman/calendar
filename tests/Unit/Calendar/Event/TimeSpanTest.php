@@ -25,7 +25,7 @@ class TimeSpanTest extends TestCase
 
     public function testStartAfterEnd()
     {
-        $this->expectExceptionMessage("End hour can't be grater than starting hour!");
+        $this->expectExceptionMessage("End hour can't be greater than starting hour!");
 
         $timeSpan = TimeSpan::fromString("12:00-11:00");
     }
@@ -39,7 +39,7 @@ class TimeSpanTest extends TestCase
 
     public function testExceedingMinutes()
     {
-        $this->expectExceptionMessage("Expected a value between 0 and 59. Got:");
+        $this->expectExceptionMessage("This is not a correct timespan expression, should be in 00:00-00:00 format.");
 
         $timeSpan = TimeSpan::fromString("00:150-12:00");
     }

@@ -8,7 +8,6 @@ use Carbon\Carbon;
 use DateInterval;
 use DatePeriod;
 use DateTime;
-use Doctrine\Common\Collections\Collection;
 use Prooph\EventSourcing\AggregateChanged;
 use Prooph\EventSourcing\AggregateRoot;
 use Ramsey\Uuid\UuidInterface;
@@ -21,14 +20,8 @@ final class Calendar extends AggregateRoot
     /** @var string */
     protected $name;
 
-    /** @var Event[]|Collection */
+    /** @var Event[] */
     protected $events = [];
-
-    /** @var DateTime */
-    protected $updatedAt;
-
-    /** @var DateTime */
-    protected $createdAt;
 
     public static function create(UuidInterface $id, string $name) : Calendar
     {
@@ -42,13 +35,11 @@ final class Calendar extends AggregateRoot
     {
         $this->id = $event->id();
         $this->name = $event->name();
-        $this->createdAt = $this->updatedAt = $event->createdAt();
     }
 
     public function whenEventCreated(EventCreated $event)
     {
-        $this->events[] = Event::create($event->id(), $this, $event->name(), $event->expression(), $event->timespan());
-        $this->updatedAt = $event->createdAt();
+        $this->events[] = Event::create($event->id(), $event->name(), $event->expression(), $event->timespan());
     }
 
     protected function aggregateId(): string
@@ -106,8 +97,6 @@ final class Calendar extends AggregateRoot
                 break;
             }
         }
-
-        $this->updatedAt = new DateTime();
     }
 
     public function name(): string
@@ -115,7 +104,7 @@ final class Calendar extends AggregateRoot
         return $this->name;
     }
 
-    public function events() : Collection
+    public function events() : array
     {
         return $this->events;
     }

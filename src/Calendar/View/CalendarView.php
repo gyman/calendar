@@ -3,7 +3,7 @@
 namespace Calendar\View;
 
 use Calendar\Event;
-use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Ramsey\Uuid\UuidInterface;
 
@@ -16,13 +16,14 @@ class CalendarView
     protected $name;
 
     /** @var Event[]|Collection */
-    protected $events = [];
+    protected $events;
 
-    /** @var DateTime */
-    protected $updatedAt;
-
-    /** @var DateTime */
-    protected $createdAt;
+    public function __construct(UuidInterface $id, string $name, ?Collection $events = null)
+    {
+        $this->id = $id;
+        $this->name = $name;
+        $this->events = $events ?? new ArrayCollection;
+    }
 
     public function id(): UuidInterface
     {
@@ -34,18 +35,8 @@ class CalendarView
         return $this->name;
     }
 
-    public function events()
+    public function events() : Collection
     {
         return $this->events;
-    }
-
-    public function updatedAt(): DateTime
-    {
-        return $this->updatedAt;
-    }
-
-    public function createdAt(): DateTime
-    {
-        return $this->createdAt;
     }
 }

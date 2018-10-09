@@ -17,8 +17,9 @@ doctrine:
 
         url: '%env(resolve:DATABASE_URL)%'
         types:
-          date_expression: App\Type\DateExpression
-          timespan: App\Type\TimeSpan
+          uuid:             Ramsey\Uuid\Doctrine\UuidType
+          date_expression:  App\Type\DateExpression
+          timespan:         App\Type\TimeSpan
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'
         naming_strategy: doctrine.orm.naming_strategy.underscore
