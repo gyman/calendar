@@ -1,13 +1,39 @@
 prooph_service_bus:
 
+  command_buses:
+    calendar_command_bus:
+      router:
+        type: 'prooph_service_bus.command_bus_router'
+        routes:
+          Calendar\Command\CreateCalendar:  '@Calendar\Handler\CreateCalendarHandler'
+          Calendar\Command\CreateEvent:     '@Calendar\Handler\CreateEventHandler'
+
+
+  query_buses:
+    calendar_query_bus:
+      router:
+        type: 'prooph_service_bus.query_bus_router'
+        routes: ~
+
   event_buses:
     calendar_event_bus:
       plugins:
         - 'prooph_service_bus.on_event_invoke_strategy'
-
       router:
         type: 'prooph_service_bus.event_bus_router'
         routes: ~
+#
+#    events_query:
+#      plugins:
+#        - 'prooph_service_bus.handle_command_invoke_strategy'
+#      router:
+#        type: 'prooph_service_bus.query_bus_router'
+#        routes: ~
+#
+#    command_bus:
+#      plugins:
+#        - 'prooph_service_bus.on_event_invoke_strategy'
+
 
 services:
   _defaults:
@@ -20,3 +46,6 @@ services:
     public: true
     tags:
     - { name: 'prooph_event_store.calendar_store.plugin' }
+
+  Prooph\Bundle\ServiceBus\QueryBus: '@prooph_service_bus.calendar_query_bus'
+  Prooph\Bundle\ServiceBus\CommandBus: '@prooph_service_bus.calendar_command_bus'

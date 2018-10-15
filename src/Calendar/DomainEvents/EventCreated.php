@@ -32,12 +32,12 @@ class EventCreated extends AggregateChanged
         return $this->payload['name'];
     }
 
-    public function expression(): ExpressionInterface
+    public function expression(): ?ExpressionInterface
     {
         return Parser::fromString($this->payload['expression']);
     }
 
-    public function timespan(): TimeSpan
+    public function timespan(): ?TimeSpan
     {
         return TimeSpan::fromString($this->payload['timespan']);
     }

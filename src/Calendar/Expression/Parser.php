@@ -4,8 +4,12 @@ namespace Calendar\Expression;
 
 class Parser
 {
-    public static function fromString(string $string) : ExpressionInterface
+    public static function fromString(?string $string = "") : ?ExpressionInterface
     {
+        if($string == null) {
+            return null;
+        }
+
         $lexer = new DateExpressionLexer();
         $stream = $lexer->lex($string);
 

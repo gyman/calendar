@@ -3,18 +3,14 @@
 namespace Projection;
 
 use App\Table;
-use Calendar\Calendar;
 use Calendar\DomainEvents\CalendarCreated;
 use Calendar\DomainEvents\EventCreated;
-use DateTime;
+use Calendar\View\CalendarView;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
-use Exception;
-use PDO;
 use Prooph\EventSourcing\AggregateChanged;
 use Prooph\EventStore\Projection\AbstractReadModel;
-use Ramsey\Uuid\Uuid;
 use function Calendar\get_class_last_part;
 
 class CalendarReadModel extends AbstractReadModel
@@ -78,16 +74,16 @@ class CalendarReadModel extends AbstractReadModel
     {
         $method = 'on' . get_class_last_part($event);
         $this->$method($event);
-        $this->em->clear(Calendar::class);
+        $this->em->clear(CalendarView::class);
     }
 
     protected function onCalendarCreated(CalendarCreated $event): void
     {
         $this->connection->insert(Table::READ_CALENDAR, [
-            'calendar_id' => $event->id(),
+            'id' => $event->id(),
             'name' => $event->name(),
-            'created_at' => $event->createdAt()->format(self::DATE_FORMAT),
-            'updated_at' => $event->createdAt()->format(self::DATE_FORMAT),
+//            'created_at' => $event->createdAt()->format(self::DATE_FORMAT),
+//            'updated_at' => $event->createdAt()->format(self::DATE_FORMAT),
         ]);
     }
 

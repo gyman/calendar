@@ -2,13 +2,14 @@
 
 namespace App\Controller;
 
-use Calendar\Calendar;
 use Calendar\Command\CreateEvent;
 use Calendar\Event;
 use Calendar\Event\TimeSpan;
 use Calendar\Expression\Parser;
+use Calendar\Query\EventQuery;
 use Calendar\Repository\CalendarViewRepositoryInterface;
-use League\Tactician\CommandBus;
+use Prooph\Bundle\ServiceBus\CommandBus;
+use Prooph\Bundle\ServiceBus\QueryBus;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,7 +32,7 @@ class EventController extends AbstractController
         return new JsonResponse([], Response::HTTP_CREATED);
     }
 
-    public function getEvent(CalendarViewRepositoryInterface $repository, Uuid $calendarId) : Response
+    public function events(CalendarViewRepositoryInterface $repository, Uuid $calendarId) : Response
     {
         $calendar = $repository->find($calendarId);
 
@@ -40,5 +41,17 @@ class EventController extends AbstractController
         return new JsonResponse(array_map(function(Event $event) {
             return $event->toString();
         }, $calendar->events()));
+    }
+
+    public function search(Request $request, QueryBus $queryBus) : JsonResponse
+    {
+        $result = $queryBus->dispatch(EventQuery::fromRequest($request->request->all()));
+
+        die(var_dump($result));
+
+
+//        return new JsonResponse(array_map(function(Event $event) {
+//            return $event->toString();
+//        }, $calendar->events()));
     }
 }

@@ -22,7 +22,7 @@ class CreateCalendarHandler
         $this->eventDispatcher = $eventDispatcher;
     }
 
-    public function handle(CreateCalendar $command)
+    public function __invoke(CreateCalendar $command)
     {
         $calendar = Calendar::create($command->id(), $command->name());
 

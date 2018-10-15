@@ -23,7 +23,7 @@ class TimeSpan extends Type
         return (string) $value;
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform) : TimeSpanVO
+    public function convertToPHPValue($value, AbstractPlatform $platform) : ?TimeSpanVO
     {
         return TimeSpanVO::fromString($value);
     }

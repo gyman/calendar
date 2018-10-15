@@ -2,30 +2,12 @@
 
 namespace Test\Functional;
 
-use Calendar\Calendar;
 use Calendar\View\CalendarView;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Tools\SchemaTool;
 use Ramsey\Uuid\Uuid;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Test\TestEventView;
 
 class CalendarControllerTest extends WebTestCase
 {
-    protected function setUp()
-    {
-        static::bootKernel();
-
-        /** @var EntityManagerInterface $em */
-        $em = static::$kernel->getContainer()->get('doctrine')->getManager();
-        $metaData = $em->getMetadataFactory()->getAllMetadata();
-
-        $tool = new SchemaTool($em);
-        $tool->dropSchema($metaData);
-        $tool->createSchema($metaData);
-    }
-
-
     public function testGetEvents()
     {
         $em = static::$kernel->getContainer()->get('doctrine')->getManager();
@@ -38,15 +20,13 @@ class CalendarControllerTest extends WebTestCase
             ->withCalendar($calendar)
             ->event();
 
-
-
         $em->persist($calendar);
         $em->persist($event);
         $em->flush();
 
         $client = static::createClient();
 
-        $crawler = $client->request('GET', '/get-events?start=20170101&end=20170107');
+        $crawler = $client->request('GET', '/events/search?start=2017-01-01&end=2017-01-07');
         $response = $client->getResponse();
 
         $this->assertEquals("application/json", $response->headers->get("Content-Type"));

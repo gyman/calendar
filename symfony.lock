@@ -137,11 +137,26 @@
     "egulias/email-validator": {
         "version": "2.1.4"
     },
+    "elasticsearch/elasticsearch": {
+        "version": "6.0.x-dev"
+    },
     "facebook/webdriver": {
         "version": "1.6.0"
     },
     "fig/link-util": {
         "version": "1.0.0"
+    },
+    "friendsofbundle/elastica-bundle": {
+        "version": "1.0.1-dev"
+    },
+    "friendsofsymfony/elastica-bundle": {
+        "version": "5.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "5.0",
+            "ref": "3f73f240ee0c3719e89f1c994ce66904e2ef84f6"
+        }
     },
     "friendsofsymfony/jsrouting-bundle": {
         "version": "2.0",
@@ -158,6 +173,12 @@
     "fzaninotto/faker": {
         "version": "v1.8.0"
     },
+    "guzzlehttp/ringphp": {
+        "version": "1.1-dev"
+    },
+    "guzzlehttp/streams": {
+        "version": "3.0-dev"
+    },
     "jakubledl/dissect": {
         "version": "v1.0.1"
     },
@@ -169,24 +190,6 @@
     },
     "justinrainbow/json-schema": {
         "version": "5.2.7"
-    },
-    "league/tactician": {
-        "version": "v1.0.3"
-    },
-    "league/tactician-bundle": {
-        "version": "1.0",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "1.0",
-            "ref": "222c3d39d38378bc6a9790a0b5baf841ba6679b9"
-        }
-    },
-    "league/tactician-container": {
-        "version": "2.0.0"
-    },
-    "league/tactician-logger": {
-        "version": "v0.10.0"
     },
     "liip/functional-test-bundle": {
         "version": "2.x-dev"
@@ -365,6 +368,12 @@
             "ref": "f7895777cd673fcefbc321a9063077a24e5df646"
         }
     },
+    "react/promise": {
+        "version": "2.x-dev"
+    },
+    "ruflin/elastica": {
+        "version": "6.0.x-dev"
+    },
     "sebastian/code-unit-reverse-lookup": {
         "version": "1.0.1"
     },
@@ -439,6 +448,9 @@
             "version": "3.3",
             "ref": "e3868d2f4a5104f19f844fe551099a00c6562527"
         }
+    },
+    "symfony/contracts": {
+        "version": "1.0-dev"
     },
     "symfony/css-selector": {
         "version": "v4.1.1"

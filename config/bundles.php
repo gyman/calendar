@@ -17,9 +17,10 @@ return [
     Symfony\Bundle\TwigBundle\TwigBundle::class => ['all' => true],
     Symfony\Bundle\WebProfilerBundle\WebProfilerBundle::class => ['dev' => true, 'test' => true],
     Symfony\Bundle\WebServerBundle\WebServerBundle::class => ['dev' => true],
-    League\Tactician\Bundle\TacticianBundle::class => ['all' => true],
     Liip\FunctionalTestBundle\LiipFunctionalTestBundle::class => ['all' => true],
     Liip\MonitorBundle\LiipMonitorBundle::class => ['all' => true],
     FOS\UserBundle\FOSUserBundle::class => ['all' => true],
     Mcfedr\UuidParamConverterBundle\McfedrUuidParamConverterBundle::class => ['all' => true],
+    FOS\ElasticaBundle\FOSElasticaBundle::class => ['all' => true],
+    FOB\HelloElasticaBundle\FOBHelloElasticaBundle::class => ['all' => true],
 ];

@@ -22,9 +22,7 @@ Feature: I can manipulate with events
       | 00000000-0000-0000-0000-000000000001 | abc  | (monday or wednesday or friday) and after 2018-01-01 | 18:00-20:00 |
       | 00000000-0000-0000-0000-000000000002 | bcd  | (saturday or sunday) and after 2018-01-01            | 10:00-12:00 |
     Then calendar '00000000-0000-0000-0000-000000000001' has 2 events
-
-
-#    And date 'last wednesday' matches event 'abc' in calendar 'test'
+    And date 'last wednesday' matches event 'abc' in calendar 'test'
 #
 #  Scenario Outline: List events for specified date range
 #    Given I add new 'test' calendar

@@ -2,15 +2,13 @@
 
 namespace App\Controller;
 
-use App\Repository\CalendarRepository;
 use Calendar\Calendar;
 use Calendar\Command\CreateCalendar;
 use Calendar\Repository\CalendarViewRepositoryInterface;
-use League\Tactician\CommandBus;
+use Prooph\Bundle\ServiceBus\CommandBus;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Webmozart\Assert\Assert;
 
@@ -18,7 +16,7 @@ class CalendarController extends AbstractController
 {
     public function create(CommandBus $bus, Uuid $calendarId, string $name) : Response
     {
-        $bus->handle(new CreateCalendar($calendarId, $name));
+        $bus->dispatch(new CreateCalendar($calendarId, $name));
 
         return new JsonResponse([], Response::HTTP_CREATED);
     }

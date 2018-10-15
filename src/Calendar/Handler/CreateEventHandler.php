@@ -18,7 +18,7 @@ class CreateEventHandler
         $this->calendarRepository = $calendarRepository;
     }
 
-    public function handle(CreateEvent $command)
+    public function __invoke(CreateEvent $command)
     {
         /** @var Calendar $calendar */
         $calendar = $this->calendarRepository->get($command->calendarId());

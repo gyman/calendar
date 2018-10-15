@@ -23,7 +23,7 @@ class EventView
     /** @var TimeSpan */
     protected $timespan;
 
-    public function __construct(UuidInterface $id, CalendarView $calendar, string $name, ExpressionInterface $expression, TimeSpan $time)
+    public function __construct(UuidInterface $id, CalendarView $calendar, string $name, ?ExpressionInterface $expression, ?TimeSpan $time)
     {
         $this->id = $id;
         $this->calendar = $calendar;
@@ -47,12 +47,12 @@ class EventView
         return $this->name;
     }
 
-    public function expression(): ExpressionInterface
+    public function expression(): ?ExpressionInterface
     {
         return $this->expression;
     }
 
-    public function timespan(): TimeSpan
+    public function timespan(): ?TimeSpan
     {
         return $this->timespan;
     }

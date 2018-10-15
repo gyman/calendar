@@ -1,0 +1,27 @@
+fos_elastica:
+  clients:
+    default: { host: localhost, port: 9200 }
+  indexes:
+    events:
+      types:
+        Calendar\Event:
+          persistence:
+            driver:                 orm
+            model:                  Calendar\View\EventView
+            provider:               ~
+            finder:                 ~
+          properties:
+            id:                     ~
+            expression:             ~
+            timespan:
+              type:                 nested
+              properties:
+                from:
+                  property_path:    start
+                to:
+                  property_path:    end
+            calendar:
+              type:                 nested
+              properties:
+                id:                 ~
+                name:               ~

@@ -15,6 +15,9 @@ services:
         resource: '../src/Infrastructure/Controller'
         tags: ['controller.service_arguments']
 
+    Calendar\Handler\:
+        resource: '../src/Calendar/Handler'
+
     App\Repository\CalendarViewRepository:
       factory: ["@doctrine.orm.entity_manager", "getRepository"]
       public: true

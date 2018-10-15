@@ -73,11 +73,8 @@ abstract class AbstractContext implements Context
      */
     public function dateMatchesEventInCalendar(string $date, string $eventName, string $id)
     {
-        /** @var Calendar $calendar */
-        $calendar = $this->getCalendarData(Uuid::fromString($id));
-
         /** @var Event[] $events */
-        $events = $calendar->matchingEvents(new DateTime($date));
+        $events = $this->getEventsMachingDate(new DateTime($date));
 
         Assert::count($events, 1);
         Assert::eq($events->first()->name(), $eventName);
@@ -180,9 +177,6 @@ abstract class AbstractContext implements Context
             array_walk($files, function($path) use ($em) {
                 $em->getConnection()->query(file_get_contents($path));
             });
-
-//            $output = $this->runCommand('event-store:event-stream:create');
-//            Assert::eq($output, "Event stream was created successfully.\n");
         }
     }
 
@@ -217,6 +211,11 @@ abstract class AbstractContext implements Context
         }
 
         return $output->fetch();
+    }
+
+    private function getEventsMachingDate(DateTime $param)
+    {
+
     }
 
 }

@@ -10,7 +10,7 @@ use Calendar\Repository\CalendarViewRepositoryInterface;
 use Calendar\Repository\EventRepositoryInterface;
 use Carbon\Carbon;
 use DateTime;
-use League\Tactician\CommandBus;
+use Prooph\Bundle\ServiceBus\CommandBus;
 use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

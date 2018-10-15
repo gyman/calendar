@@ -24,7 +24,7 @@ class DateExpression extends Type
         return (string) $value;
     }
 
-    public function convertToPHPValue($value, AbstractPlatform $platform) : ExpressionInterface
+    public function convertToPHPValue($value, AbstractPlatform $platform) : ?ExpressionInterface
     {
         return Parser::fromString($value);
     }

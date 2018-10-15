@@ -18,19 +18,14 @@ event.create:
   controller: App\Controller\EventController::create
   methods: POST
 
-event.get:
+event.all:
   path: /calendar/{calendarId}/event
-  controller: App\Controller\EventController::getEvent
+  controller: App\Controller\EventController::events
   methods: GET
 
-#
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::indexAction
-#
-#getEvents:
-#    path: /get-events
-#    controller: App\Controller\DefaultController::getEventsAction
+event.search:
+    path: /events/search
+    controller: App\Controller\EventController::search
 #    options:
 #      expose: true
 #

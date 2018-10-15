@@ -3,14 +3,19 @@
                   xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping
         https://raw.github.com/doctrine/doctrine2/master/doctrine-mapping.xsd">
 
-    <entity name="Calendar\View\CalendarView" table="read_calendars" repository-class="App\Repository\CalendarViewRepository" read-only="true">
-        <id name="id" type="uuid" column="calendar_id">
+    <entity name="Calendar\View\EventView" table="read_events" repository-class="App\Repository\EventViewRepository" read-only="true">
+        <id name="id" type="uuid" column="event_id">
             <generator strategy="NONE"/>
         </id>
 
-        <one-to-many field="events" target-entity="Calendar\View\EventView" mapped-by="calendar" />
+        <many-to-one field="calendar" target-entity="Calendar\View\CalendarView" />
 
         <field name="name" column="name" type="string" length="255" nullable="false" unique="false" />
+
+        <field name="expression" column="expression" type="date_expression" nullable="true" unique="false" />
+
+        <field name="timespan" column="timespan" type="timespan" length="12" nullable="true" unique="false" />
+
     </entity>
 
 </doctrine-mapping>

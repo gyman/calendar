@@ -12,11 +12,12 @@
         "doctrine/doctrine-fixtures-bundle": "^3.0",
         "doctrine/orm": "^2.6",
         "easycorp/easyadmin-bundle": "^1.17",
+        "friendsofbundle/elastica-bundle": "^1.0@dev",
+        "friendsofsymfony/elastica-bundle": "^5.1@dev",
         "friendsofsymfony/jsrouting-bundle": "^2.2",
         "friendsofsymfony/user-bundle": "^2.1",
         "fzaninotto/faker": "^1.8",
         "jakubledl/dissect": "^1.0",
-        "league/tactician-bundle": "^1.1",
         "liip/functional-test-bundle": "~2.0@dev",
         "liip/monitor-bundle": "^2.7",
         "mcfedr/uuid-paramconverter": "^2.3",
@@ -128,5 +129,6 @@
         "symfony": {
             "allow-contrib": false
         }
-    }
+    },
+    "minimum-stability" : "dev"
 }
