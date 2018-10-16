@@ -4,15 +4,39 @@ fos_elastica:
   indexes:
     events:
       types:
+        Calendar:
+          persistence:
+            driver:                 orm
+            model:                  Calendar\View\CalendarView
+            provider:               ~
+            finder:                 ~
+          properties:
+            id:                     ~
+            name:                   ~
+
         Calendar\Event:
           persistence:
             driver:                 orm
             model:                  Calendar\View\EventView
             provider:               ~
             finder:                 ~
+          _parent:
+            type:                   Calendar
+            property:               calendar
+            identifier:             id
           properties:
             id:                     ~
-            expression:             ~
+            expression:
+              type:                 nested
+              properties:
+                after:
+                  property_path:    start
+                before:
+                  property_path:    end
+                dayOfWeek:
+                  property_path:    start
+                exactly:
+                    property_path:  end
             timespan:
               type:                 nested
               properties:
@@ -20,8 +44,3 @@ fos_elastica:
                   property_path:    start
                 to:
                   property_path:    end
-            calendar:
-              type:                 nested
-              properties:
-                id:                 ~
-                name:               ~

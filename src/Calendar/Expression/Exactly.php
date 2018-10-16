@@ -17,7 +17,7 @@ final class Exactly implements ExpressionInterface
 
     public function isMatching(DateTime $date): bool
     {
-        return $date->format("Ymd") ==+ $date->format("Ymd");
+        return $date->format("Ymd") == $date->format("Ymd");
     }
 
     public function __toString(): string

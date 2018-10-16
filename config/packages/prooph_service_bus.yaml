@@ -13,7 +13,8 @@ prooph_service_bus:
     calendar_query_bus:
       router:
         type: 'prooph_service_bus.query_bus_router'
-        routes: ~
+        routes:
+          Calendar\Query\EventQuery:        '@Calendar\Handler\EventQueryHandler'
 
   event_buses:
     calendar_event_bus:

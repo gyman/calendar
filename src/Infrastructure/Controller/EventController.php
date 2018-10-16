@@ -11,6 +11,7 @@ use Calendar\Repository\CalendarViewRepositoryInterface;
 use Prooph\Bundle\ServiceBus\CommandBus;
 use Prooph\Bundle\ServiceBus\QueryBus;
 use Ramsey\Uuid\Uuid;
+use React\Promise\Promise;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,7 +46,13 @@ class EventController extends AbstractController
 
     public function search(Request $request, QueryBus $queryBus) : JsonResponse
     {
-        $result = $queryBus->dispatch(EventQuery::fromRequest($request->request->all()));
+        $result = $queryBus->dispatch(
+            EventQuery::fromRequest($request->request->all())
+        )->done(function(array $result){
+            return $result;
+        }, function($reason){
+            die(var_dump($reason));
+        });
 
         die(var_dump($result));
 
