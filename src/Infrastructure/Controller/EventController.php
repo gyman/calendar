@@ -46,19 +46,14 @@ class EventController extends AbstractController
 
     public function search(Request $request, QueryBus $queryBus) : JsonResponse
     {
-        $result = $queryBus->dispatch(
+        $result = [];
+
+        $queryBus->dispatch(
             EventQuery::fromRequest($request->request->all())
-        )->done(function(array $result){
-            return $result;
-        }, function($reason){
-            die(var_dump($reason));
+        )->done(function(array $data) use (&$result){
+            $result = $data;
         });
 
-        die(var_dump($result));
-
-
-//        return new JsonResponse(array_map(function(Event $event) {
-//            return $event->toString();
-//        }, $calendar->events()));
+        return new JsonResponse($result);
     }
 }

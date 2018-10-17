@@ -23,4 +23,6 @@ return [
     Mcfedr\UuidParamConverterBundle\McfedrUuidParamConverterBundle::class => ['all' => true],
     FOS\ElasticaBundle\FOSElasticaBundle::class => ['all' => true],
     FOB\HelloElasticaBundle\FOBHelloElasticaBundle::class => ['all' => true],
+    Nelmio\CorsBundle\NelmioCorsBundle::class => ['all' => true],
+    ApiPlatform\Core\Bridge\Symfony\Bundle\ApiPlatformBundle::class => ['all' => true],
 ];

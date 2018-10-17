@@ -4,15 +4,15 @@ fos_elastica:
   indexes:
     events:
       types:
-        Calendar:
-          persistence:
-            driver:                 orm
-            model:                  Calendar\View\CalendarView
-            provider:               ~
-            finder:                 ~
-          properties:
-            id:                     ~
-            name:                   ~
+#        Calendar:
+#          persistence:
+#            driver:                 orm
+#            model:                  Calendar\View\CalendarView
+#            provider:               ~
+#            finder:                 ~
+#          properties:
+#            id:                     ~
+#            name:                   ~
 
         Calendar\Event:
           persistence:
@@ -21,22 +21,22 @@ fos_elastica:
             provider:               ~
             finder:                 ~
           _parent:
-            type:                   Calendar
+            type:                   Calendar\View\CalendarView
             property:               calendar
             identifier:             id
           properties:
             id:                     ~
-            expression:
-              type:                 nested
-              properties:
-                after:
-                  property_path:    start
-                before:
-                  property_path:    end
-                dayOfWeek:
-                  property_path:    start
-                exactly:
-                    property_path:  end
+            expression:             ~
+#              type:                 nested
+#              properties:
+#                after:
+#                  property_path:    start
+#                before:
+#                  property_path:    end
+#                dayOfWeek:
+#                  property_path:    start
+#                exactly:
+#                    property_path:  end
             timespan:
               type:                 nested
               properties:

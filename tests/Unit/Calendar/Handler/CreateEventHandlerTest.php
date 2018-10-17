@@ -25,7 +25,7 @@ class CreateEventHandlerTest extends TestCase
 
         $handler = new CreateEventHandler($calendarRepository->reveal());
 
-        $handler->handle(CreateEvent::withData(
+        $handler(CreateEvent::withData(
             $calendarId,
             $eventId,
             "some name",
